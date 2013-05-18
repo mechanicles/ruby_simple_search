@@ -26,7 +26,7 @@
 #  Post.simple_serach('tutorial')
 #  # => posts which have tutorial text in title or in description fields
 #
-#  User.simple_search('Mechanciles')
+#  User.simple_search('Mechanicles')
 #  # => users which have mechanicles text in the email, username and in address
 #
 #  Model.simple_search('string') will return ActiveRecord::Relation object
