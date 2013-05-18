@@ -1,9 +1,9 @@
 # RubySimpleSearch allows to search on the table fields. 
-# e.g. string and text fileds.
+# e.g. string and text fields.
 #
-# Sometimes we want to do search on the post's text and context
+# Sometimes we want to do search on the post's title and content
 # or user's email, username and description or on other models but in same way.
-# For those searches we use MySql's or Postgresql's LIKE clause to get the
+# For those searches we use MySql's or Postgresql's LIKE operator to get the
 # results. While doing same thing on the differet models you actually add lots of
 # duplications in your code.
 #
@@ -12,10 +12,14 @@
 # Define attributes that you want to search through RubySimpleSearch
 #
 #   class Post < ActiveActiveRecord::Base
+#     include RubySimpleSearch
+#
 #     simple_search_attributes :title, :description
 #   end
 #
 #   class User < < ActiveActiveRecord::Base
+#     include RubySimpleSearch
+#
 #     simple_search_attributes :email, :username, :address
 #   end
 #
