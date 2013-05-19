@@ -3,8 +3,8 @@
 #
 # Sometimes we want to do search on the post's title and content
 # or user's email, username and description or on other models but in same way.
-# For those searches we use MySql's or Postgresql's LIKE operator to get the
-# results. While doing same thing on the differet models you actually add lots of
+# For those searches we use MySql's or PostgreSQL's LIKE operator to get the
+# results. While doing same thing on the different models you actually add lots of
 # duplications in your code.
 #
 # To avoid duplicating the same code, use RubySimpleSearch :)
