@@ -36,7 +36,7 @@ class Post < ActiveActiveRecord::Base
   simple_search_attributes :title, :description
 end
 
-class User < < ActiveActiveRecord::Base
+class User < ActiveActiveRecord::Base
   include RubySimpleSearch
 
   simple_search_attributes :email, :username, :address
