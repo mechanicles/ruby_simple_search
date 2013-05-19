@@ -23,7 +23,7 @@
 #     simple_search_attributes :email, :username, :address
 #   end
 #
-#  Post.simple_serach('tutorial')
+#  Post.simple_search('tutorial')
 #  # => posts which have tutorial text in title or in description fields
 #
 #  User.simple_search('Mechanicles')
