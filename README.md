@@ -13,10 +13,11 @@ on the different models you actually add lots of duplications in your code.
 
 To avoid duplicating the same code, use RubySimpleSearch :)
 
-# RubySimpleSearch Features:
+#### RubySimpleSearch Features:
 - Added like pattern support ('begining', 'ending', 'containing', 'underscore', 'plain')
   By default pattern is 'containing'
 
+```Ruby
     simple_search_attributes :name, :addres, :pattern => :ending
     # => It will search like '%york'
 
@@ -31,9 +32,10 @@ To avoid duplicating the same code, use RubySimpleSearch :)
 
     simple_search_attributes :name, :addres, :pattern => :plain
     # => It will search like '_york_'
+```
 
 - Added block support to simple_search method, so user can extend the query as per
-  his/her requirements (e.g. so you can operate on integer values also)
+  his/her requirements (Now you can operate on integer values also)
 
 - Added specs
 
@@ -85,8 +87,8 @@ User.simple_search('mechanicles') do |search_term|
 end
 
 # => You can pass block to simple_search method so you can extend it as your
-wish but you need to return an array of valid parameters like you do in #where
-method
+# wish but you need to return an array of valid parameters like you do in #where
+# method
 
 Model.simple_search('string')
 # => with and without block will return ActiveRecord::Relation object
