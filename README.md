@@ -1,37 +1,37 @@
 # RubySimpleSearch
 
-RubySimpleSearch allows to search on the table fields.
-e.g. string and text fields.
+RubySimpleSearch allows you to search on the table fields (string and text fields)
+very easily.
 
-On Admin side we do have one common search text field to search
-the table columns data.
+Mostly on Admin side we do have one common search text field to search the table
+columns data.
 
-Sometimes we want to do search on the title, content and ratings on the post model
-or email, username and description on the user model. For those searches we use
-MySql's or PostgreSQL's LIKE operator to get the results. While doing same thing
+Sometimes we want to do search on the title, content and ratings on the post model or
+email, username and description on the user model. For those searches we use MySql's
+or PostgreSQL's LIKE operator to get the results. While doing same thing again and again
 on the different models you actually add lots of duplications in your code.
 
 To avoid duplicating the same code, use RubySimpleSearch :)
 
 #### RubySimpleSearch Features:
-- Added like pattern support ('begining', 'ending', 'containing', 'underscore', 'plain')
+- Added like pattern support ('begining', 'ending', 'containing', 'underscore', 'plain').
   By default pattern is 'containing'
 
 ```Ruby
     simple_search_attributes :name, :addres, :pattern => :ending
-    # => It will search like '%york'
+    # It will search like '%york'
 
     simple_search_attributes :name, :addres, :pattern => :begining"
-    # => It will search like 'york%'
+    # It will search like 'york%'
 
     simple_search_attributes :name, :addres, :pattern => :containing
-    # => It will search like '%york%'
+    # It will search like '%york%'
 
     simple_search_attributes :name, :addres, :pattern => :underscore
-    # => It will search like '_york_'
+    # It will search like '_york_'
 
     simple_search_attributes :name, :addres, :pattern => :plain
-    # => It will search like '_york_'
+    # It will search like 'york'
 ```
 
 - Added block support to simple_search method, so user can extend the query as per
