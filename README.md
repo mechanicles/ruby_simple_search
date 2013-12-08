@@ -21,7 +21,7 @@ To avoid duplicating the same code, use RubySimpleSearch :)
     simple_search_attributes :name, :addres, :pattern => :ending
     # It will search like '%york'
 
-    simple_search_attributes :name, :addres, :pattern => :begining"
+    simple_search_attributes :name, :addres, :pattern => :begining
     # It will search like 'york%'
 
     simple_search_attributes :name, :addres, :pattern => :containing
@@ -35,7 +35,7 @@ To avoid duplicating the same code, use RubySimpleSearch :)
 ```
 
 - Added block support to simple_search method, so user can extend the query as per
-  his/her requirements (Now you can operate on integer values also)
+  his/her requirements (Now you can operate on the integer values also)
 
 - Added specs
 
