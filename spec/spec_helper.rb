@@ -38,5 +38,3 @@ def drop_database
     ActiveRecord::Base.connection.drop_table(table)
   end
 end
-
-

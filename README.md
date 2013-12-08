@@ -1,15 +1,43 @@
 # RubySimpleSearch
 
-RubySimpleSearch allows to search on the table fields. 
+RubySimpleSearch allows to search on the table fields.
 e.g. string and text fields.
 
-Sometimes we want to do search on the post's title and content
-or user's email, username and description or on other models but in same way.
-For those searches we use MySql's or PostgreSQL's LIKE operator to get the
-results. While doing same thing on the different models you actually add lots of 
-duplications in your code.
+On Admin side we do have one common search text field to search
+the table columns data.
+
+Sometimes we want to do search on the title, content and ratings on the post model
+or email, username and description on the user model. For those searches we use
+MySql's or PostgreSQL's LIKE operator to get the results. While doing same thing
+on the different models you actually add lots of duplications in your code.
 
 To avoid duplicating the same code, use RubySimpleSearch :)
+
+# RubySimpleSearch Features:
+- Added like pattern support ('begining', 'ending', 'containing', 'underscore', 'plain')
+  By default pattern is 'containing'
+
+    simple_search_attributes :name, :addres, :pattern => :ending
+    # => It will search like '%york'
+
+    simple_search_attributes :name, :addres, :pattern => :begining"
+    # => It will search like 'york%'
+
+    simple_search_attributes :name, :addres, :pattern => :containing
+    # => It will search like '%york%'
+
+    simple_search_attributes :name, :addres, :pattern => :underscore
+    # => It will search like '_york_'
+
+    simple_search_attributes :name, :addres, :pattern => :plain
+    # => It will search like '_york_'
+
+- Added block support to simple_search method, so user can extend the query as per
+  his/her requirements (e.g. so you can operate on integer values also)
+
+- Added specs
+
+- Added exception handler
 
 ## Installation
 
@@ -33,7 +61,7 @@ Define attributes that you want to search through RubySimpleSearch
 class Post < ActiveActiveRecord::Base
   include RubySimpleSearch
 
-  simple_search_attributes :title, :description
+  simple_search_attributes :title, :description, :pattern => :begining
 end
 
 class User < ActiveActiveRecord::Base
@@ -42,14 +70,26 @@ class User < ActiveActiveRecord::Base
   simple_search_attributes :email, :username, :address
 end
 
-Post.simple_search('tutorial')
-# => posts which have 'tutorial' text in title or in description fields
+# While defining simple_search_attributes, don't add integer/decimal data
+# attributes to it. It will give an error, instead of this you can do
+# integer/decimal operation by passing block to simple search method
 
-User.simple_search('Mechanicles')
-# => users which have 'Mechanicles' text in the email, username and in address
+Post.simple_search('tuto')
+# => posts which have 'tuto%' text in the title or in the description fields
+
+User.simple_search('mechanicles')
+# => users which have 'mechanicles' text in the email, username and in address
+
+User.simple_search('mechanicles') do |search_term|
+  ["and address != ?", search_term]
+end
+
+# => You can pass block to simple_search method so you can extend it as your
+wish but you need to return an array of valid parameters like you do in #where
+method
 
 Model.simple_search('string')
-# => will return ActiveRecord::Relation object
+# => with and without block will return ActiveRecord::Relation object
 ```
 ## Contributing
 
