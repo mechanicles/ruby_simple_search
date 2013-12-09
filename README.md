@@ -14,23 +14,23 @@ on the different models you actually add lots of duplications in your code.
 To avoid duplicating the same code, use RubySimpleSearch :)
 
 #### RubySimpleSearch Features:
-- Added like pattern support ('begining', 'ending', 'containing', 'underscore', 'plain').
+- Added like pattern support ('beginning', 'ending', 'containing', 'underscore', 'plain').
   By default pattern is 'containing'
 
 ```Ruby
-    simple_search_attributes :name, :addres, :pattern => :ending
+    simple_search_attributes :name, :address, :pattern => :ending
     # It will search like '%york'
 
-    simple_search_attributes :name, :addres, :pattern => :begining
+    simple_search_attributes :name, :address, :pattern => :begining
     # It will search like 'york%'
 
-    simple_search_attributes :name, :addres, :pattern => :containing
+    simple_search_attributes :name, :address, :pattern => :containing
     # It will search like '%york%'
 
-    simple_search_attributes :name, :addres, :pattern => :underscore
+    simple_search_attributes :name, :address, :pattern => :underscore
     # It will search like '_york_'
 
-    simple_search_attributes :name, :addres, :pattern => :plain
+    simple_search_attributes :name, :address, :pattern => :plain
     # It will search like 'york'
 ```
 

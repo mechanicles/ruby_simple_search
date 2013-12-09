@@ -23,7 +23,7 @@ describe User do
     it "can have patterns like plain, begining, ending, containing and underscore" do
       User2.simple_search_attributes :name, :contact, :pattern => :plain
       expect(User2.instance_variable_get("@simple_search_pattern")).to eq('q')
-      User2.simple_search_attributes :name, :contact, :pattern => :begining
+      User2.simple_search_attributes :name, :contact, :pattern => :beginning
       expect(User2.instance_variable_get("@simple_search_pattern")).to eq('q%')
       User2.simple_search_attributes :name, :contact, :pattern => :ending
       expect(User2.instance_variable_get("@simple_search_pattern")).to eq('%q')
@@ -35,7 +35,7 @@ describe User do
 
     it "searches the records with begining pattern" do
       users = User.where("name like ?", 'bo%')
-      User.simple_search_attributes :name, :contact, :address, :pattern => :begining
+      User.simple_search_attributes :name, :contact, :address, :pattern => :beginning
       searched_users = User.simple_search('bo')
       expect(users.count).to eq(searched_users.count)
     end
