@@ -3,13 +3,13 @@
 RubySimpleSearch allows you to search on the table fields (string and text fields)
 very easily.
 
-Mostly on admin side, we do have a common text field to search the table
-columns data.
+Mostly on the admin side, we do have a common text field to search the table
+column's data.
 
-Sometimes we want to do search on the title, content and ratings on the post model or
+Sometimes we want to do a search on the title, content and ratings on the post model or
 email, username and description on the user model. For those searches we use MySQL's
-or PostgreSQL's LIKE operator to get the results. While doing same thing again and again
-on the different models you actually add lots of duplications in your code.
+or PostgreSQL's LIKE operator to get the results. While doing the same thing again and again
+on the different models you actually add lots of duplication in your code.
 
 To avoid duplicating the same code, use RubySimpleSearch :)
 
@@ -73,8 +73,8 @@ class User < ActiveActiveRecord::Base
 end
 ```
 While defining simple_search_attributes, don't add integer/decimal data
-attributes to it. It will give an error, instead of this you can do
-integer/decimal operation by passing block to simple search method
+attributes to it, instead of this you can do integer/decimal operation
+by passing block to simple search method
 ```Ruby
 Post.simple_search('tuto')
 # => posts which have 'tuto%' text in the title or in the description fields
