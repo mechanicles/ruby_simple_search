@@ -3,7 +3,7 @@
 RubySimpleSearch allows you to search on the table fields (string and text fields)
 very easily.
 
-Mostly on admin side, we do have a common search text field to search the table
+Mostly on admin side, we do have a common text field to search the table
 columns data.
 
 Sometimes we want to do search on the title, content and ratings on the post model or
@@ -64,42 +64,43 @@ class Post < ActiveActiveRecord::Base
 
   simple_search_attributes :title, :description, :pattern => :begining
 end
-
+```
+```Ruby
 class User < ActiveActiveRecord::Base
   include RubySimpleSearch
 
   simple_search_attributes :email, :username, :address
 end
-
-# While defining simple_search_attributes, don't add integer/decimal data
-# attributes to it. It will give an error, instead of this you can do
-# integer/decimal operation by passing block to simple search method
-
+```
+While defining simple_search_attributes, don't add integer/decimal data
+attributes to it. It will give an error, instead of this you can do
+integer/decimal operation by passing block to simple search method
+```Ruby
 Post.simple_search('tuto')
 # => posts which have 'tuto%' text in the title or in the description fields
-
+```
+```Ruby
 User.simple_search('mechanicles')
 # => users which have 'mechanicles' text in the email, username and in address
-
+```
+```Ruby
 User.simple_search('mechanicles') do |search_term|
   ["and address != ?", search_term]
 end
-
 # => You can pass block to simple_search method so you can extend it as your
 # wish but you need to return an array of valid parameters like you do in #where
 # method
-
+```
+```Ruby
 Model.simple_search('string')
 # => with and without block will return ActiveRecord::Relation object
-
+```
+```Ruby
 Model.simple_search('string').to_sql
-
 #OR
-
 User.simple_search('mechanicles') do |search_term|
   ["and address != ?", search_term]
 end.to_sql
-
 # => will return sql query in string format
 ```
 ## Contributing

@@ -34,7 +34,7 @@ describe User do
     end
 
     it "should raise an exception if pattern is wrong" do
-      expect{ User2.simple_search_attributes :name, :pattern => :wrong }.to raise_error(RubySimpleSearch::Error::INVALID_PATTERN)
+      expect{ User2.simple_search_attributes :name, :pattern => 'wrong' }.to raise_error(RubySimpleSearch::Error::INVALID_PATTERN)
     end
   end
 
@@ -70,10 +70,25 @@ describe User do
         searched_users = User.simple_search('ce')
         expect(users.count).to eq(searched_users.count)
       end
+
+      it "searches the records with underscore pattern" do
+        users = User.where("name like ?", 'ce')
+        User.simple_search_attributes :name, :contact, :address, :pattern => :underscore
+        searched_users = User.simple_search('ce')
+        expect(users.count).to eq(searched_users.count)
+      end
+
+      it "searches the records with plain pattern" do
+        users = User.where("name like ?", 'bob')
+        User.simple_search_attributes :name, :contact, :address, :pattern => :plain
+        searched_users = User.simple_search('bob')
+        expect(users.count).to eq(searched_users.count)
+      end
     end
 
     context "Extendable" do
       it "returns users who live in usa and their age shoule be greater than 50" do
+        User.simple_search_attributes :name, :contact, :address, :pattern => :plain
         users = User.where(:age => 60)
         searched_users = User.simple_search('usa') do |search_term|
           ['AND age > ?', 50]
@@ -81,10 +96,10 @@ describe User do
         expect(users.to_a).to eq(searched_users.to_a)
       end
 
-      it "returns exception if return parameters of array are wrong in simple_search block" do
+      it "returns exception if array condition is wrong in simple_search block" do
         expect{ User.simple_search('usa') do |search_term|
           ['AND age > ?', 50, 60]
-        end }.to raise_error(RubySimpleSearch::Error::INVALID_PARAMETERS)
+        end }.to raise_error(RubySimpleSearch::Error::INVALID_CONDITION)
       end
 
       it "returns exception if return value is not an array type" do

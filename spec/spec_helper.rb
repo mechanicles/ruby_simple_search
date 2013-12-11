@@ -7,12 +7,12 @@ RSpec.configure do |config|
   config.before(:all) do
     ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
     create_database
-    @alice = User.create  :email  => "alice@example.com",
-                          :name => "alice", :address => "usa",
-                          :contact => '12345', :age => 60
-    @bob   = User.create  :email  => "bob@example.com",
-                          :name => "bob", :address => "usa",
-                          :contact => "56789", :age => 26
+    User.create :email  => "alice@example.com",
+                :name => "alice", :address => "usa",
+                :contact => '12345', :age => 60
+    User.create :email  => "bob@example.com",
+                :name => "bob", :address => "usa",
+                :contact => "56789", :age => 26
   end
 
   config.after(:all) do

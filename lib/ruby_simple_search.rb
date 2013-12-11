@@ -16,9 +16,7 @@ module RubySimpleSearch
           if !arg.is_a?(Hash)
             @simple_search_attributes << arg
           else
-            pattern = RubySimpleSearch::LIKE_PATTERNS[arg[:pattern].to_sym] rescue nil
-            raise RubySimpleSearch::Error::INVALID_PATTERN if pattern.nil?
-            @simple_search_pattern = pattern
+           set_pattern(arg[:pattern]) if arg[:pattern].present?
           end
         end
       end
@@ -38,16 +36,14 @@ module RubySimpleSearch
       patterned_text = "#{@simple_search_pattern.gsub('q', search_term.try(:downcase))}"
 
       @simple_search_attributes.each do |attr|
-        sql_query_condition = if sql_query_condition.blank?
-                                "(LOWER(#{attr.to_s}) LIKE ?"
-                              else
-                                "#{sql_query_condition} OR LOWER(#{attr.to_s}) LIKE ?"
-                              end
+        sql_query_condition << set_sql_query_condition(attr, sql_query_condition)
         sql_query_values << patterned_text
       end
-      sql_query_condition << ")"
 
-      extended_query = block.call(search_term) if block.is_a? Proc
+      if block.is_a? Proc
+        sql_query_condition = "(#{sql_query_condition})"
+        extended_query = block.call(search_term)
+      end
 
       if !extended_query.nil?
         sql_query_values, sql_query_condition = extend_simple_search(extended_query,
@@ -59,13 +55,21 @@ module RubySimpleSearch
       where(sql_query.try(:flatten))
     end
 
+    private
+
+    def set_pattern(pattern)
+      pattern = RubySimpleSearch::LIKE_PATTERNS[pattern.to_sym] rescue nil
+      raise RubySimpleSearch::Error::INVALID_PATTERN if pattern.nil?
+      @simple_search_pattern = pattern
+    end
+
     def extend_simple_search(extended_query, sql_query_condition, sql_query_values)
       raise RubySimpleSearch::Error::INVALID_TYPE unless extended_query.is_a?(Array)
       extended_query_condition = extended_query[0]
       extended_query_values = extended_query - [extended_query[0]]
 
       if extended_query_condition.count('?') != (extended_query_values.size)
-        raise RubySimpleSearch::Error::INVALID_PARAMETERS
+        raise RubySimpleSearch::Error::INVALID_CONDITION
       end
 
       sql_query_condition = [sql_query_condition, extended_query_condition].join(' ')
@@ -73,5 +77,11 @@ module RubySimpleSearch
 
       [sql_query_values, sql_query_condition]
     end
+
+    def set_sql_query_condition(attr, sql_query_condition)
+      return "LOWER(#{attr.to_s}) LIKE ?" if sql_query_condition.blank?
+      " OR LOWER(#{attr.to_s}) LIKE ?"
+    end
+
   end
 end
