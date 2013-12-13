@@ -10,23 +10,19 @@ module RubySimpleSearch
     class_eval do
       def self.simple_search_attributes(*args)
         @simple_search_attributes = []
-        # default pattern is '%q%'
-        @simple_search_pattern = RubySimpleSearch::LIKE_PATTERNS[:containing]
         args.each do |arg|
-          if !arg.is_a?(Hash)
-            @simple_search_attributes << arg
-          else
-           set_pattern(arg[:pattern]) if arg[:pattern].present?
-          end
+          raise ArgumentError, "Argument #{arg} should be in symbol format" unless arg.is_a? Symbol
+          @simple_search_attributes << arg
         end
       end
     end
   end
 
   module ClassMethods
-    def simple_search(search_term, &block)
+    def simple_search(search_term, options={}, &block)
       raise RubySimpleSearch::Error::ATTRIBUTES_MISSING if @simple_search_attributes.blank?
       raise ArgumentError, "Argument is not string" unless search_term.is_a? String
+      set_pattern(options[:pattern])
 
       sql_query = nil
       extended_query = nil
@@ -58,9 +54,14 @@ module RubySimpleSearch
     private
 
     def set_pattern(pattern)
-      pattern = RubySimpleSearch::LIKE_PATTERNS[pattern.to_sym] rescue nil
-      raise RubySimpleSearch::Error::INVALID_PATTERN if pattern.nil?
-      @simple_search_pattern = pattern
+      if pattern.nil?
+        # default pattern is '%q%'
+        @simple_search_pattern = RubySimpleSearch::LIKE_PATTERNS[:containing]
+      else
+        pattern = RubySimpleSearch::LIKE_PATTERNS[pattern.to_sym]
+        raise RubySimpleSearch::Error::INVALID_PATTERN if pattern.nil?
+        @simple_search_pattern = pattern
+      end
     end
 
     def extend_simple_search(extended_query, sql_query_condition, sql_query_values)

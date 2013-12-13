@@ -15,27 +15,6 @@ describe User do
       expect(User2.instance_variable_get("@simple_search_attributes")).to eq([:name, :contact])
     end
 
-    it "has default pattern" do
-      User2.simple_search_attributes :name, :contact
-      expect(User2.instance_variable_get("@simple_search_pattern")).to eq('%q%')
-    end
-
-    it "can have patterns like plain, beginning, ending, containing and underscore" do
-      User2.simple_search_attributes :name, :contact, :pattern => :plain
-      expect(User2.instance_variable_get("@simple_search_pattern")).to eq('q')
-      User2.simple_search_attributes :name, :contact, :pattern => :beginning
-      expect(User2.instance_variable_get("@simple_search_pattern")).to eq('q%')
-      User2.simple_search_attributes :name, :contact, :pattern => :ending
-      expect(User2.instance_variable_get("@simple_search_pattern")).to eq('%q')
-      User2.simple_search_attributes :name, :contact, :pattern => :containing
-      expect(User2.instance_variable_get("@simple_search_pattern")).to eq('%q%')
-      User2.simple_search_attributes :name, :contact, :pattern => :underscore
-      expect(User2.instance_variable_get("@simple_search_pattern")).to eq('_q_')
-    end
-
-    it "should raise an exception if pattern is wrong" do
-      expect{ User2.simple_search_attributes :name, :pattern => 'wrong' }.to raise_error(RubySimpleSearch::Error::INVALID_PATTERN)
-    end
   end
 
   describe ".simple_search" do
@@ -43,6 +22,34 @@ describe User do
       it "searches users whose name are 'alice'" do
         user = User.find_by_name('alice')
         users = User.simple_search('alice')
+        users.should include(user)
+      end
+
+      it "has default pattern" do
+        User.find_by_name('alice')
+        expect(User.instance_variable_get("@simple_search_pattern")).to eq('%q%')
+      end
+
+      it "can have patterns like plain, beginning, ending, containing and underscore" do
+        User.simple_search('alice', pattern: :plain)
+        expect(User.instance_variable_get("@simple_search_pattern")).to eq('q')
+        User.simple_search('al', pattern: :beginning)
+        expect(User.instance_variable_get("@simple_search_pattern")).to eq('q%')
+        User.simple_search('alice', pattern: :ending)
+        expect(User.instance_variable_get("@simple_search_pattern")).to eq('%q')
+        User.simple_search('alice', pattern: :containing)
+        expect(User.instance_variable_get("@simple_search_pattern")).to eq('%q%')
+        User.simple_search('alice', pattern: :underscore)
+        expect(User.instance_variable_get("@simple_search_pattern")).to eq('_q_')
+      end
+
+      it "should raise an exception if pattern is wrong" do
+        expect{ User.simple_search('alice', pattern: 'wrong') }.to raise_error(RubySimpleSearch::Error::INVALID_PATTERN)
+      end
+
+      it "searches users whose name are 'alice' with beginning pattern" do
+        user = User.find_by_name('alice')
+        users = User.simple_search('al', { pattern: :beginning })
         users.should include(user)
       end
 
@@ -59,38 +66,38 @@ describe User do
 
       it "searches the records with beginning pattern" do
         users = User.where("name like ?", 'bo%')
-        User.simple_search_attributes :name, :contact, :address, :pattern => :beginning
-        searched_users = User.simple_search('bo')
+        User.simple_search_attributes :name, :contact, :address
+        searched_users = User.simple_search('bo', pattern: :beginning)
         expect(users.count).to eq(searched_users.count)
       end
 
       it "searches the records with ending pattern" do
         users = User.where("name like ?", '%ce')
-        User.simple_search_attributes :name, :contact, :address, :pattern => :ending
-        searched_users = User.simple_search('ce')
+        User.simple_search_attributes :name, :contact, :address
+        searched_users = User.simple_search('ce', pattern: :ending)
         expect(users.count).to eq(searched_users.count)
       end
 
       it "searches the records with underscore pattern" do
         users = User.where("name like ?", 'ce')
-        User.simple_search_attributes :name, :contact, :address, :pattern => :underscore
-        searched_users = User.simple_search('ce')
+        User.simple_search_attributes :name, :contact, :address
+        searched_users = User.simple_search('ce', pattern: :underscore)
         expect(users.count).to eq(searched_users.count)
       end
 
       it "searches the records with plain pattern" do
         users = User.where("name like ?", 'bob')
-        User.simple_search_attributes :name, :contact, :address, :pattern => :plain
-        searched_users = User.simple_search('bob')
+        User.simple_search_attributes :name, :contact, :address
+        searched_users = User.simple_search('bob', pattern: :plain)
         expect(users.count).to eq(searched_users.count)
       end
     end
 
     context "Extendable" do
       it "returns users who live in usa and their age shoule be greater than 50" do
-        User.simple_search_attributes :name, :contact, :address, :pattern => :plain
+        User.simple_search_attributes :name, :contact, :address
         users = User.where(:age => 60)
-        searched_users = User.simple_search('usa') do |search_term|
+        searched_users = User.simple_search('usa', pattern: :plain) do |search_term|
           ['AND age > ?', 50]
         end
         expect(users.to_a).to eq(searched_users.to_a)
