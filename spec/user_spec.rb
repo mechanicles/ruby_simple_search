@@ -2,23 +2,19 @@ require 'spec_helper'
 require_relative "../spec/lib/user.rb"
 require_relative "../spec/lib/user2.rb"
 
-describe User do
-
+describe 'User'  do
   describe ".simple_search_attributes" do
-
-    it "returns an exception if simple_search_attributes is not called while loading the model" do
-      expect { User2.simple_search('usa') }.to raise_error(RubySimpleSearch::Error::ATTRIBUTES_MISSING)
+    it "sets attributes" do
+      expect(User.instance_variable_get("@simple_search_attributes")).to eq([:name, :email, :contact, :address])
     end
 
-    it "sets simple_search_attributes" do
-      User2.simple_search_attributes :name, :contact
-      expect(User2.instance_variable_get("@simple_search_attributes")).to eq([:name, :contact])
+    it "does not return an exception if simple_search_attributes is not called while loading the model" do
+      expect { User.simple_search('usa') }.to_not raise_error(RubySimpleSearch::Error::ATTRIBUTES_MISSING)
     end
-
   end
 
   describe ".simple_search" do
-    context "Simple" do
+    context "without block" do
       it "searches users whose name are 'alice'" do
         user = User.find_by_name('alice')
         users = User.simple_search('alice')
@@ -43,7 +39,7 @@ describe User do
         expect(User.instance_variable_get("@simple_search_pattern")).to eq('_q_')
       end
 
-      it "should raise an exception if pattern is wrong" do
+      it "raises an exception if pattern is wrong" do
         expect{ User.simple_search('alice', pattern: 'wrong') }.to raise_error(RubySimpleSearch::Error::INVALID_PATTERN)
       end
 
@@ -93,7 +89,7 @@ describe User do
       end
     end
 
-    context "Extendable" do
+    context "with block" do
       it "returns users who live in usa and their age shoule be greater than 50" do
         User.simple_search_attributes :name, :contact, :address
         users = User.where(:age => 60)
@@ -103,17 +99,30 @@ describe User do
         expect(users.to_a).to eq(searched_users.to_a)
       end
 
-      it "returns exception if array condition is wrong in simple_search block" do
+      it "returns an exception if array condition is wrong in simple_search block" do
         expect{ User.simple_search('usa') do |search_term|
           ['AND age > ?', 50, 60]
         end }.to raise_error(RubySimpleSearch::Error::INVALID_CONDITION)
       end
 
-      it "returns exception if return value is not an array type" do
+      it "returns an exception if return value is not an array type" do
         expect{ User.simple_search('usa') do |search_term|
           "Wrong return"
         end }.to raise_error(RubySimpleSearch::Error::INVALID_TYPE)
       end
+    end
+  end
+end
+
+describe User2 do
+  describe ".simple_search_attributes" do
+    it "returns an exception if simple_search_attributes is not called while loading the model" do
+      expect { User2.simple_search('usa') }.to raise_error(RubySimpleSearch::Error::ATTRIBUTES_MISSING)
+    end
+
+    it "sets attributes if simple_search_attributes method is called on the model" do
+      User2.simple_search_attributes :name, :contact
+      expect(User2.instance_variable_get("@simple_search_attributes")).to eq([:name, :contact])
     end
   end
 end
