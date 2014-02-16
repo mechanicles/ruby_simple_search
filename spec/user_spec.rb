@@ -120,6 +120,11 @@ describe User2 do
       expect { User2.simple_search('usa') }.to raise_error(RubySimpleSearch::Error::ATTRIBUTES_MISSING)
     end
 
+    it "returns an exception if simple_search_attributes has wrong attribute type" do
+      User2.simple_search_attributes :name, 24
+      expect { User2.simple_search('usa') }.to raise_error("Argument should be in symbol format")
+    end
+
     it "sets attributes if simple_search_attributes method is called on the model" do
       User2.simple_search_attributes :name, :contact
       expect(User2.instance_variable_get("@simple_search_attributes")).to eq([:name, :contact])

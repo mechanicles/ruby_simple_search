@@ -11,7 +11,7 @@ module RubySimpleSearch
       def self.simple_search_attributes(*args)
         @simple_search_attributes = []
         args.each do |arg|
-          raise ArgumentError, "Argument #{arg} should be in symbol format" unless arg.is_a? Symbol
+          raise ArgumentError, "Argument should be in symbol format" unless arg.is_a? Symbol
           @simple_search_attributes << arg
         end
       end
@@ -48,7 +48,7 @@ module RubySimpleSearch
       end
       sql_query = [sql_query_condition, sql_query_values]
 
-      where(sql_query.try(:flatten))
+      where(sql_query.flatten)
     end
 
     private

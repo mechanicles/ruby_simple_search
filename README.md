@@ -18,19 +18,19 @@ To avoid duplicating the same code, use RubySimpleSearch :)
   By default pattern is 'containing'
 
 ```Ruby
-    simple_search_attributes :name, :address, :pattern => :ending
+    Post.simple_search('york', :pattern => :ending)
     # It will search like '%york'
 
-    simple_search_attributes :name, :address, :pattern => :begining
+    Post.simple_search('york', :pattern => :begining)
     # It will search like 'york%'
 
-    simple_search_attributes :name, :address, :pattern => :containing
+    Post.simple_search('york', :pattern => :containing)
     # It will search like '%york%'
 
-    simple_search_attributes :name, :address, :pattern => :underscore
+    Post.simple_search('o', :pattern => :underscore)
     # It will search like '_o_'
 
-    simple_search_attributes :name, :address, :pattern => :plain
+    Post.simple_search('yourk', :pattern => :plain)
     # It will search like 'york'
 ```
 - Added **block** support to simple_search method, so user can extend the query as per
@@ -62,7 +62,7 @@ Define attributes that you want to search through RubySimpleSearch
 class Post < ActiveActiveRecord::Base
   include RubySimpleSearch
 
-  simple_search_attributes :title, :description, :pattern => :begining
+  simple_search_attributes :title, :description
 end
 ```
 ```Ruby
@@ -76,7 +76,7 @@ While defining simple_search_attributes, don't add integer/decimal data
 attributes to it, instead of this you can do integer/decimal operation
 by passing block to simple search method
 ```Ruby
-Post.simple_search('tuto')
+Post.simple_search('tuto', :pattern => :begining)
 # => posts which have 'tuto%' text in the title or in the description fields
 ```
 ```Ruby
