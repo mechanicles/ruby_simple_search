@@ -80,8 +80,8 @@ module RubySimpleSearch
     end
 
     def set_sql_query_condition(attr, sql_query_condition)
-      return "LOWER(#{attr.to_s}) LIKE ?" if sql_query_condition.blank?
-      " OR LOWER(#{attr.to_s}) LIKE ?"
+      return "LOWER(#{self.table_name}.#{attr.to_s}) LIKE ?" if sql_query_condition.blank?
+      " OR LOWER(#{self.table_name}.#{attr.to_s}) LIKE ?"
     end
 
   end
