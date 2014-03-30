@@ -13,6 +13,13 @@ on the different models you actually add lots of duplication in your code.
 
 To avoid duplicating the same code, use RubySimpleSearch :)
 
+#### Version 0.0.3 changes:
+- 'LIKE' pattern is more flexible now. Now you can pass pattern on ```simple_search```
+  method directly. Pattne support on the ```simple_search_attributes``` method has
+  removed.
+- Fixed column ambiguous error when used with the joins
+
+
 #### RubySimpleSearch Features:
 - Added like pattern support ('beginning', 'ending', 'containing', 'underscore', 'plain').
   By default pattern is 'containing'
