@@ -15,8 +15,7 @@ To avoid duplicating the same code, use RubySimpleSearch :)
 
 #### Version 0.0.3 changes:
 - 'LIKE' pattern is more flexible now. Now you can pass pattern on ```simple_search```
-  method directly. Pattne support on the ```simple_search_attributes``` method has
-  removed.
+  method directly. Pattern support on the ```simple_search_attributes``` method has been removed
 - Fixed column ambiguous error when used with the joins
 
 
@@ -40,7 +39,7 @@ To avoid duplicating the same code, use RubySimpleSearch :)
     Post.simple_search('yourk', :pattern => :plain)
     # It will search like 'york'
 ```
-- Added **block** support to simple_search method, so user can extend the query as per
+- Added **block** support to ```simple_search``` method, so user can extend the query as per
   his/her requirements (Now you can operate on the integer/decimal values also)
 
 - Added specs
@@ -79,9 +78,9 @@ class User < ActiveActiveRecord::Base
   simple_search_attributes :email, :username, :address
 end
 ```
-While defining simple_search_attributes, don't add integer/decimal data
+While defining ```simple_search_attributes```, don't add integer/decimal data
 attributes to it, instead of this you can do integer/decimal operation
-by passing block to simple search method
+by passing block to ```simple_search``` method
 ```Ruby
 Post.simple_search('tuto', :pattern => :begining)
 # => posts which have 'tuto%' text in the title or in the description fields
