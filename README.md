@@ -3,8 +3,8 @@
 RubySimpleSearch allows you to search on the table fields (string and text fields)
 very easily.
 
-Mostly on the admin side, we do have a common text field to search the table
-column's data.
+Mostly on the admin side, we do have a common text field to search the data on the
+table.
 
 Sometimes we want to do a search on the title, content and ratings on the post model or
 email, username and description on the user model. For those searches we use MySQL's
@@ -20,7 +20,7 @@ To avoid duplicating the same code, use RubySimpleSearch :)
 
 
 #### RubySimpleSearch Features:
-- Added like pattern support ('beginning', 'ending', 'containing', 'underscore', 'plain').
+- Added 'LIKE' pattern support ('beginning', 'ending', 'containing', 'underscore', 'plain').
   By default pattern is 'containing'
 
 ```Ruby
