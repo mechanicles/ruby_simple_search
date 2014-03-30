@@ -11,7 +11,7 @@ module RubySimpleSearch
       def self.simple_search_attributes(*args)
         @simple_search_attributes = []
         args.each do |arg|
-          raise ArgumentError, "Argument should be in symbol format" unless arg.is_a? Symbol
+          raise ArgumentError, RubySimpleSearch::Errors::WROG_ATTRIBUTES unless arg.is_a? Symbol
           @simple_search_attributes << arg
         end
       end
@@ -20,7 +20,7 @@ module RubySimpleSearch
 
   module ClassMethods
     def simple_search(search_term, options={}, &block)
-      raise RubySimpleSearch::Error::ATTRIBUTES_MISSING if @simple_search_attributes.blank?
+      raise RubySimpleSearch::Errors::ATTRIBUTES_MISSING if @simple_search_attributes.blank?
       raise ArgumentError, "Argument is not string" unless search_term.is_a? String
       set_pattern(options[:pattern])
 
@@ -59,18 +59,18 @@ module RubySimpleSearch
         @simple_search_pattern = RubySimpleSearch::LIKE_PATTERNS[:containing]
       else
         pattern = RubySimpleSearch::LIKE_PATTERNS[pattern.to_sym]
-        raise RubySimpleSearch::Error::INVALID_PATTERN if pattern.nil?
+        raise RubySimpleSearch::Errors::INVALID_PATTERN if pattern.nil?
         @simple_search_pattern = pattern
       end
     end
 
     def extend_simple_search(extended_query, sql_query_condition, sql_query_values)
-      raise RubySimpleSearch::Error::INVALID_TYPE unless extended_query.is_a?(Array)
+      raise RubySimpleSearch::Errors::INVALID_TYPE unless extended_query.is_a?(Array)
       extended_query_condition = extended_query[0]
       extended_query_values = extended_query - [extended_query[0]]
 
       if extended_query_condition.count('?') != (extended_query_values.size)
-        raise RubySimpleSearch::Error::INVALID_CONDITION
+        raise RubySimpleSearch::Errors::INVALID_CONDITION
       end
 
       sql_query_condition = [sql_query_condition, extended_query_condition].join(' ')
