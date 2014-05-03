@@ -11,7 +11,7 @@ module RubySimpleSearch
       def self.simple_search_attributes(*args)
         @simple_search_attributes = []
         args.each do |arg|
-          raise ArgumentError, RubySimpleSearch::Errors::WROG_ATTRIBUTES unless arg.is_a? Symbol
+          raise ArgumentError, RubySimpleSearch::Errors::WRONG_ATTRIBUTES unless arg.is_a? Symbol
           @simple_search_attributes << arg
         end
       end
@@ -24,7 +24,6 @@ module RubySimpleSearch
       raise ArgumentError, "Argument is not string" unless search_term.is_a? String
       set_pattern(options[:pattern])
 
-      sql_query = nil
       extended_query = nil
       sql_query_condition = ""
       sql_query_values = []
