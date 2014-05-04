@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.version       = RubySimpleSearch::VERSION
   gem.authors       = ["Santosh Wadghule"]
   gem.email         = ["santosh.wadghule@gmail.com"]
-  gem.description   = %q{It will search on the attributes that you provided to simple_search_attributes method}
+  gem.description   = %q{Searches through the attributes (table's columns)}
   gem.summary       = %q{Ruby simple search for ActiveRecord}
   gem.homepage      = "https://github.com/mechanicles/ruby_simple_search"
 
