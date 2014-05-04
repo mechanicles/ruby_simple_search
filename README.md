@@ -27,7 +27,7 @@ To avoid duplicating the same code, use RubySimpleSearch :)
     Post.simple_search('york', :pattern => :ending)
     # It will search like '%york'
 
-    Post.simple_search('york', :pattern => :begining)
+    Post.simple_search('york', :pattern => :beginning)
     # It will search like 'york%'
 
     Post.simple_search('york', :pattern => :containing)
@@ -82,7 +82,7 @@ While defining ```simple_search_attributes```, don't add integer/decimal data
 attributes to it, instead of this you can do integer/decimal operation
 by passing block to ```simple_search``` method
 ```Ruby
-Post.simple_search('tuto', :pattern => :begining)
+Post.simple_search('tuto', :pattern => :beginning)
 # => posts which have 'tuto%' text in the title or in the description fields
 ```
 ```Ruby
