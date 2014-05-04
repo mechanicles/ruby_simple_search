@@ -121,7 +121,7 @@ describe User2 do
     end
 
     it "returns an exception if simple_search_attributes method has wrong attribute type" do
-      expect { User2.simple_search_attributes :name, '24' }.to raise_error(RubySimpleSearch::Errors::WROG_ATTRIBUTES)
+      expect { User2.simple_search_attributes :name, '24' }.to raise_error(RubySimpleSearch::Errors::WRONG_ATTRIBUTES)
     end
 
     it "sets attributes if simple_search_attributes method is called on the model" do
