@@ -13,6 +13,9 @@ RSpec.configure do |config|
     User.create :email  => "bob@example.com",
                 :name => "bob", :address => "usa",
                 :contact => "56789", :age => 26
+    User.create :email  => "bob@something.com",
+                :name => "bob", :address => "uk",
+                :contact => "45786", :age => 21
   end
 
   config.after(:all) do

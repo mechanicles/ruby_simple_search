@@ -30,9 +30,12 @@ module RubySimpleSearch
 
       patterned_text = "#{@simple_search_pattern.gsub('q', search_term.try(:downcase))}"
 
-      @simple_search_attributes.each do |attr|
-        sql_query_condition << set_sql_query_condition(attr, sql_query_condition)
-        sql_query_values << patterned_text
+
+      if options[:attributes].nil?
+        sql_query_values, sql_query_condition = search_attributes(@simple_search_attributes, patterned_text)
+      else
+        attr = *options[:attributes]
+        sql_query_values, sql_query_condition = search_attributes(attr, patterned_text)
       end
 
       if block.is_a? Proc
@@ -81,6 +84,18 @@ module RubySimpleSearch
     def set_sql_query_condition(attr, sql_query_condition)
       return "LOWER(#{self.table_name}.#{attr.to_s}) LIKE ?" if sql_query_condition.blank?
       " OR LOWER(#{self.table_name}.#{attr.to_s}) LIKE ?"
+    end
+
+    def search_attributes(attributes, patterned_text)
+      sql_query_condition = ""
+      sql_query_values = []
+
+      attributes.each do |attr|
+        sql_query_condition << set_sql_query_condition(attr, sql_query_condition)
+        sql_query_values << patterned_text
+      end
+
+      [sql_query_values, sql_query_condition]
     end
 
   end
