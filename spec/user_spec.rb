@@ -111,6 +111,28 @@ describe 'User'  do
         end }.to raise_error(RubySimpleSearch::Errors::INVALID_TYPE)
       end
     end
+
+    context "with specified attributes" do
+      it "searches user with email containing 'example'" do
+        users = User.where("email like ?", '%example%')
+        User.simple_search_attributes :name, :contact, :address #whatever, doesn't matter
+        searched_users = User.simple_search('example', {pattern: :containing, attributes: [:email]})
+        expect(users.count).to eq(searched_users.count)
+      end
+
+      it "searches user with contact containing '45'" do
+        users = User.where("contact like ?", '%45%')
+        searched_users = User.simple_search('45', pattern: :containing, attributes: :contact)
+        expect(users.count).to eq(searched_users.count)
+      end
+
+      it "searches user with name or address containing 'a'" do
+        users = User.where("name like ? OR address like ?", '%a%', '%a%')
+        searched_users = User.simple_search('a', pattern: :containing, attributes: [:name, :address])
+        expect(users.count).to eq(searched_users.count)
+      end
+    end
+
   end
 end
 
