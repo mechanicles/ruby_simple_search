@@ -1,5 +1,7 @@
 # RubySimpleSearch
 
+[![CircleCI](https://circleci.com/gh/mechanicles/ruby_simple_search.svg?style=svg)](https://circleci.com/gh/mechanicles/ruby_simple_search)
+
 RubySimpleSearch allows you to search on the table fields (string and text fields)
 very easily.
 
