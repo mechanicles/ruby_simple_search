@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="rspec" tests="22" skipped="0" failures="0" errors="0" time="0.089352" timestamp="2017-09-26T16:18:23+05:30" hostname="Santoshs-MacBook-Pro.local">
+<properties>
+<property name="seed" value="29379"/>
+</properties>
+<testcase classname="spec.user_spec" name="User .simple_search_attributes sets attributes" file="./spec/user_spec.rb" time="0.000852"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search_attributes does not return an exception if simple_search_attributes is not called while loading the model" file="./spec/user_spec.rb" time="0.002189"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search without block searches users whose names are &apos;alice&apos;" file="./spec/user_spec.rb" time="0.003916"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search without block has default &apos;LIKE&apos; pattern" file="./spec/user_spec.rb" time="0.000374"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search without block can have &apos;LIKE&apos; patterns like plain, beginning, ending, containing and underscore" file="./spec/user_spec.rb" time="0.000536"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search without block raises an exception if pattern is wrong" file="./spec/user_spec.rb" time="0.000147"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search without block searches users whose names are &apos;alice&apos; with beginning pattern" file="./spec/user_spec.rb" time="0.000776"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search without block returns empty records if contact number does not exist" file="./spec/user_spec.rb" time="0.003276"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search without block searches user records if users belong to &apos;USA&apos;" file="./spec/user_spec.rb" time="0.001074"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search without block searches the records with beginning pattern" file="./spec/user_spec.rb" time="0.000793"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search without block searches the records with ending pattern" file="./spec/user_spec.rb" time="0.000682"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search without block searches the records with underscore pattern" file="./spec/user_spec.rb" time="0.000644"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search without block searches the records with plain pattern" file="./spec/user_spec.rb" time="0.000662"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search with block returns users who live in usa and their age should be greater than 50" file="./spec/user_spec.rb" time="0.000748"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search with block returns an exception if array condition is wrong in simple_search block" file="./spec/user_spec.rb" time="0.000120"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search with block returns an exception if return value is not an array type" file="./spec/user_spec.rb" time="0.000111"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search with specified attributes searches user with email containing &apos;example&apos;" file="./spec/user_spec.rb" time="0.000654"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search with specified attributes searches user with contact containing &apos;45&apos;" file="./spec/user_spec.rb" time="0.000663"></testcase>
+<testcase classname="spec.user_spec" name="User .simple_search with specified attributes searches user with name or address containing &apos;a&apos;" file="./spec/user_spec.rb" time="0.000650"></testcase>
+<testcase classname="spec.user_spec" name="User2.simple_search_attributes returns an exception if simple_search_attributes method is not called while loading the model" file="./spec/user_spec.rb" time="0.000147"></testcase>
+<testcase classname="spec.user_spec" name="User2.simple_search_attributes returns an exception if simple_search_attributes method has wrong attribute type" file="./spec/user_spec.rb" time="0.000105"></testcase>
+<testcase classname="spec.user_spec" name="User2.simple_search_attributes sets attributes if simple_search_attributes method is called on the model" file="./spec/user_spec.rb" time="0.000065"></testcase>
+</testsuite>

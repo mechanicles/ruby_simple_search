@@ -3,23 +3,25 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'ruby_simple_search/version'
 
-Gem::Specification.new do |gem|
-  gem.name          = "ruby_simple_search"
-  gem.version       = RubySimpleSearch::VERSION
-  gem.authors       = ["Santosh Wadghule"]
-  gem.email         = ["santosh.wadghule@gmail.com"]
-  gem.description   = %q{Searches through the attributes (table's columns)}
-  gem.summary       = %q{Ruby simple search for ActiveRecord}
-  gem.homepage      = "https://github.com/mechanicles/ruby_simple_search"
+Gem::Specification.new do |spec|
+  spec.name          = "ruby_simple_search"
+  spec.version       = RubySimpleSearch::VERSION
+  spec.authors       = ["Santosh Wadghule"]
+  spec.email         = ["santosh.wadghule@gmail.com"]
+  spec.description   = %q{Searches through the attributes (table's columns)}
+  spec.summary       = %q{Ruby simple search for ActiveRecord}
+  spec.homepage      = "https://github.com/mechanicles/ruby_simple_search"
 
-  gem.add_dependency "activesupport", ">= 3.0.0"
-  gem.add_dependency "activerecord",  ">= 3.0.0"
-  gem.add_dependency "sqlite3"
-  gem.add_development_dependency "rspec"
-  gem.required_ruby_version = ">= 1.9.2"
+  spec.add_dependency "activesupport", ">= 3.0.0"
+  spec.add_dependency "activerecord",  ">= 3.0.0"
+  spec.add_dependency "sqlite3"
+  spec.add_development_dependency "rspec", "~> 3.2"
+  spec.add_development_dependency "rspec_junit_formatter"
+  spec.add_development_dependency "bundler", "~> 1.3"
+  spec.required_ruby_version = ">= 1.9.2"
 
-  gem.files         = `git ls-files`.split($/)
-  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ["lib"]
+  spec.files         = `git ls-files`.split($/)
+  spec.executables   = spec.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
+  spec.require_paths = ["lib"]
 end
