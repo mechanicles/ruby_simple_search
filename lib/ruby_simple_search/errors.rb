@@ -1,5 +1,3 @@
-require "ruby_simple_search/errors"
-
 module RubySimpleSearch
 
   module Errors
