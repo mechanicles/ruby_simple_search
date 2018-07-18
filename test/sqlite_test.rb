@@ -14,5 +14,8 @@ class TestSqlite < Minitest::Test
                  create_dummy_data
                end
   end
-end
 
+  def teardown
+    drop_database
+  end
+end

@@ -23,4 +23,8 @@ class MysqlTest < Minitest::Test
                  create_dummy_data
                end
   end
+
+  def teardown
+    drop_database
+  end
 end

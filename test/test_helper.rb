@@ -59,7 +59,7 @@ def drop_database
   ActiveRecord::Migration.verbose = false
 
   if ActiveRecord::Migration.table_exists?(:users)
-    ActiveRecord::Migration.drop_table(:users) 
+    ActiveRecord::Migration.drop_table(:users)
   end
 end
 
@@ -76,7 +76,7 @@ module UserTest
   def test_it_sets_attributes_properly
     User.simple_search_attributes :name, :email, :contact, :address
 
-    assert_equal [:name, :email, :contact, :address], User.instance_variable_get('@simple_search_attributes')
+    assert_equal %i[name email contact address], User.instance_variable_get('@simple_search_attributes')
   end
 
   def test_it_has_default_like_pattern
@@ -234,6 +234,14 @@ module User2Test
     error = assert_raises(RuntimeError) { User2.simple_search('usa') }
 
     assert_equal RubySimpleSearch::Errors::ATTRIBUTES_MISSING, error.message
+  end
+
+  def test_returns_an_exception_if_search_term_argument_is_not_string_type
+    User2.simple_search_attributes :name, :contact
+
+    error = assert_raises(ArgumentError) { User2.simple_search(1) }
+
+    assert_equal RubySimpleSearch::Errors::SEARCH_ARG_TYPE, error.message
   end
 
   def test_returns_an_exception_if_simple_search_attributes_method_has_wrong_attribute_type
