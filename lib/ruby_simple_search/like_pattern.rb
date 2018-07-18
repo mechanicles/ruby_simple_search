@@ -1,5 +1,4 @@
 module RubySimpleSearch
-
   LIKE_PATTERNS = {
     plain: 'q',
     underscore: '_q_',
@@ -7,5 +6,4 @@ module RubySimpleSearch
     ending: '%q',
     containing: '%q%'
   }.freeze
-
 end
