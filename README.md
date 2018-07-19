@@ -1,14 +1,21 @@
 # RubySimpleSearch
 
+Simplest way to to search the data in ActiveRecord models.
+
+It offers simple but useful features:
+
+- Search on the default attributes
+- Search on the specific attributes
+- Search using patterns
+- Support JOINs
+- Block support to extend the search query
+
+#### It follows the DRY principle :)
+
 [![CircleCI](https://circleci.com/gh/mechanicles/ruby_simple_search.svg?style=svg)](https://circleci.com/gh/mechanicles/ruby_simple_search)
 
-RubySimpleSearch allows you to search on the table fields (string and text fields)
-very easily.
-
 Mostly on the admin side, we do have a common text field to search the data on the
-table.
-
-Sometimes we want to do a search on the title, content and ratings on the post model or
+table. Sometimes we want to do a search on the title, content and ratings on the post model or
 email, username and description on the user model. For those searches we use MySQL's
 or PostgreSQL's LIKE operator to get the results. While doing the same thing again and again
 on the different models you actually add lots of duplication in your code.
@@ -25,20 +32,20 @@ To avoid duplicating the same code, use RubySimpleSearch :)
 - Added 'LIKE' pattern support ('beginning', 'ending', 'containing', 'underscore', 'plain').
   By default pattern is 'containing'
 
-```Ruby
-    Post.simple_search('york', :pattern => :ending)
+```ruby
+    Post.simple_search('york', pattern: :ending)
     # It will search like '%york'
 
-    Post.simple_search('york', :pattern => :beginning)
+    Post.simple_search('york', pattern: :beginning)
     # It will search like 'york%'
 
-    Post.simple_search('york', :pattern => :containing)
+    Post.simple_search('york', pattern: :containing)
     # It will search like '%york%'
 
-    Post.simple_search('o', :pattern => :underscore)
+    Post.simple_search('o', pattern: :underscore)
     # It will search like '_o_'
 
-    Post.simple_search('yourk', :pattern => :plain)
+    Post.simple_search('yourk', pattern: :plain)
     # It will search like 'york'
 ```
 - Added **block** support to ```simple_search``` method, so user can extend the query as per
