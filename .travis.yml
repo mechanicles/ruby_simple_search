@@ -4,7 +4,9 @@ rvm:
   - jruby
 gemfile: Gemfile
 sudo: false
-script: RUBYOPT=W0 bundle exec rake test
+script:
+  - bundle exec rake build
+  - bundle exec rake builddoc
 before_install:
   - gem install bundler
   - mysql -e 'create database ruby_simple_search_test;'
