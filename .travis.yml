@@ -1,4 +1,5 @@
 language: ruby
+cache: bundler
 rvm:
   - 2.2.2
   - jruby
@@ -6,7 +7,6 @@ gemfile: Gemfile
 sudo: false
 script: RUBYOPT=W0 bundle exec rake test
 before_install:
-  - gem install bundler
   - mysql -e 'create database ruby_simple_search_test;'
   - psql -c 'create database ruby_simple_search_test;' -U postgres
 notifications:
