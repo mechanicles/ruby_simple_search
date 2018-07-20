@@ -2,6 +2,9 @@ language: ruby
 rvm:
   - 2.2.2
   - jruby
+gemfile: Gemfile
+sudo: false
+script: RUBYOPT=W0 bundle exec rake test
 before_install:
   - gem install bundler
   - mysql -e 'create database ruby_simple_search_test;'
@@ -10,3 +13,7 @@ notifications:
   email:
     on_success: never
     on_failure: change
+matrix:
+  allow_failures:
+    - rvm: jruby
+      gemfile: Gemfile
