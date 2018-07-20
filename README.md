@@ -1,14 +1,16 @@
 # RubySimpleSearch
 
-Simplest way to to search the data in ActiveRecord models.
+Simplest way to search the data in ActiveRecord models.
 
 It offers simple but useful features:
 
 - Search on the default attributes
 - Search on the specific attributes
 - Search using patterns
+- Simple search returns an `ActiveRecord::Relation`
 - Support JOINs
 - Block support to extend the search query
+
 
 #### It follows the DRY principle :)
 
@@ -20,7 +22,7 @@ email, username and description on the user model. For those searches we use MyS
 or PostgreSQL's LIKE operator to get the results. While doing the same thing again and again
 on the different models you actually add lots of duplication in your code.
 
-To avoid duplicating the same code, use RubySimpleSearch :)
+#### To avoid duplicating the same code, use RubySimpleSearch :)
 
 #### Version 0.0.3 changes:
 - 'LIKE' pattern is more flexible now. Now you can pass pattern on ```simple_search```

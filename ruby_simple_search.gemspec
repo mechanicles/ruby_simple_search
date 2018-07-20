@@ -7,8 +7,8 @@ Gem::Specification.new do |spec|
   spec.version       = RubySimpleSearch::VERSION
   spec.authors       = ['Santosh Wadghule']
   spec.email         = ['santosh.wadghule@gmail.com']
-  spec.description   = 'The simplest way to search your database table records'
-  spec.summary       = 'The simplest way to search your database table records'
+  spec.description   = 'The simplest way to search the data'
+  spec.summary       = 'The simplest way to search the data'
   spec.homepage      = 'https://github.com/mechanicles/ruby_simple_search'
   spec.license       = 'MIT'
 
