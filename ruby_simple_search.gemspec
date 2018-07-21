@@ -21,18 +21,10 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'activerecord'
   spec.add_development_dependency 'bundler', '~> 1.3'
-  spec.add_development_dependency 'byebug'
   spec.add_development_dependency 'minitest'
+  spec.add_development_dependency 'mysql2', '~> 0.3.20'
+  spec.add_development_dependency 'pg'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rubocop'
-
-  if RUBY_PLATFORM == 'java'
-    spec.add_development_dependency 'activerecord-jdbcmysql-adapter'
-    spec.add_development_dependency 'activerecord-jdbcpostgresql-adapter'
-    spec.add_development_dependency 'activerecord-jdbcsqlite3-adapter'
-  else
-    spec.add_development_dependency 'mysql2', '~> 0.3.20'
-    spec.add_development_dependency 'pg'
-    spec.add_development_dependency 'sqlite3'
-  end
+  spec.add_development_dependency 'sqlite3'
 end

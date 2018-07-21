@@ -1,5 +1,5 @@
 require 'ruby_simple_search/version'
-require 'ruby_simple_search/like_pattern'
+require 'ruby_simple_search/like_patterns'
 require 'ruby_simple_search/errors'
 require 'active_support/concern'
 
@@ -60,14 +60,14 @@ module RubySimpleSearch
                    end
 
       attributes.each do |attribute|
-        condition, needed_search_term = build_query_conditions(attribute)
+        condition, value = build_query_condition_and_value(attribute)
 
         @simple_search_query_conditions << condition
-        @simple_search_query_values << needed_search_term
+        @simple_search_query_values << value
       end
     end
 
-    def build_query_conditions(attribute)
+    def build_query_condition_and_value(attribute)
       if %i[string text].include?(columns_hash[attribute.to_s].type)
         build_query_for_string_text_type(attribute)
       else

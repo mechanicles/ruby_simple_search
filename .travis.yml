@@ -2,7 +2,6 @@ language: ruby
 cache: bundler
 rvm:
   - 2.2.2
-  - jruby
 gemfile: Gemfile
 sudo: false
 script: RUBYOPT=W0 bundle exec rake test
@@ -14,7 +13,3 @@ notifications:
   email:
     on_success: never
     on_failure: change
-matrix:
-  allow_failures:
-    - rvm: jruby
-      gemfile: Gemfile
