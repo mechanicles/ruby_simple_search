@@ -1,8 +1,9 @@
 require_relative 'test_helper'
 
 class PostgresqlTest < Minitest::Test
+  include ExcpetionsTest
   include UserTest
-  include User2Test
+  include JoinTest
 
   @setup = nil
 

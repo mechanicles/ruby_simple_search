@@ -10,8 +10,9 @@ module ActiveRecord
 end
 
 class MysqlTest < Minitest::Test
+  include ExcpetionsTest
   include UserTest
-  include User2Test
+  include JoinTest
 
   @setup = nil
 

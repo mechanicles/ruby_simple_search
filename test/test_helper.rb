@@ -9,8 +9,13 @@ Minitest::Test = Minitest::Unit::TestCase unless defined?(Minitest::Test)
 
 class User < ActiveRecord::Base
   include RubySimpleSearch
+  has_many :posts
 
   simple_search_attributes :name, :email, :contact, :address
+end
+
+class Post < ActiveRecord::Base
+  belongs_to :user
 end
 
 class User2 < ActiveRecord::Base
@@ -30,10 +35,16 @@ def create_tables
     t.string :username
     t.timestamps
   end
+
+  ActiveRecord::Migration.create_table :posts, force: true do |t|
+    t.string :name, null: false
+    t.references :user
+    t.timestamps
+  end
 end
 
 def create_dummy_data
-  User.create! email: 'alice@example.com',
+  alice = User.create! email: 'alice@example.com',
     name: "alice",
     address: 'usa',
     contact: '12345',
@@ -53,6 +64,8 @@ def create_dummy_data
     contact: '45786',
     age: 21,
     username: 'kingkhan'
+
+  Post.create! name: 'Ruby is simple', user: alice
 end
 
 def drop_database
@@ -70,7 +83,7 @@ module UserTest
     # This will just make sure that internal variables for RubySimpleSearch
     # get set properly.
 
-    assert_silent { User.simple_search('usa') }
+    assert_silent { User.simple_search('USA') }
   end
 
   def test_it_sets_attributes_properly
@@ -80,7 +93,7 @@ module UserTest
   end
 
   def test_it_has_default_like_pattern
-    User.simple_search('alice')
+    User.simple_search('Alice')
 
     assert_equal '%q%', User.instance_variable_get('@simple_search_pattern')
   end
@@ -137,7 +150,7 @@ module UserTest
 
   def test_it_searches_user_records_if_users_belong_to_usa
     users          = User.where(address: 'usa')
-    searched_users = User.simple_search('usa')
+    searched_users = User.simple_search('USA')
 
     assert_equal users.pluck(:id), searched_users.pluck(:id)
   end
@@ -227,7 +240,17 @@ module UserTest
   end
 end
 
-module User2Test
+module JoinTest
+  def test_simple_search_using_join
+    searched_users = User.joins(:posts).simple_search('alice') do |_|
+      ['AND posts.name = ? ', 'Ruby is simple' ]
+    end
+
+    assert_equal ['alice'], searched_users.pluck(:name)
+  end
+end
+
+module ExcpetionsTest
   def test_returns_an_exception_if_simple_search_attributes_method_is_not_called_while_loading_the_model
     User2.simple_search_attributes
 
