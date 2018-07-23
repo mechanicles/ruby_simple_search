@@ -1,61 +1,24 @@
 # RubySimpleSearch
 
-Simplest way to search the data in ActiveRecord models.
+The simplest way to search the data in ActiveRecord models.
 
 It offers simple but useful features:
 
 - Search on the default attributes
-- Search on the specific attributes
+- Override default search attributes to specific attributes
 - Search using patterns
-- Simple search returns an `ActiveRecord::Relation`
-- Support JOINs
 - Block support to extend the search query
+- Simple search returns an `ActiveRecord::Relation`
 
+Mostly on the admin side, we do have a standard text field to search the data on the table.
+Sometimes we want to search for the title, content and ratings on the post model or email,
+username and description on the user model. For those searches, we use MySQL's or PostgreSQL's
+`LIKE` operator to get the results. While doing the same thing again and again on the different
+models, you add lots of duplication in your code.
 
-#### It follows the DRY principle :)
+#### Do not repeat yourself, use RubySimpleSearch.
 
 [![CircleCI](https://circleci.com/gh/mechanicles/ruby_simple_search.svg?style=svg)](https://circleci.com/gh/mechanicles/ruby_simple_search)
-
-Mostly on the admin side, we do have a common text field to search the data on the
-table. Sometimes we want to do a search on the title, content and ratings on the post model or
-email, username and description on the user model. For those searches we use MySQL's
-or PostgreSQL's LIKE operator to get the results. While doing the same thing again and again
-on the different models you actually add lots of duplication in your code.
-
-#### To avoid duplicating the same code, use RubySimpleSearch :)
-
-#### Version 0.0.3 changes:
-- 'LIKE' pattern is more flexible now. Now you can pass pattern on ```simple_search```
-  method directly. Pattern support on the ```simple_search_attributes``` method has been removed
-- Fixed column ambiguous error when used with the joins
-
-
-#### RubySimpleSearch Features:
-- Added 'LIKE' pattern support ('beginning', 'ending', 'containing', 'underscore', 'plain').
-  By default pattern is 'containing'
-
-```ruby
-    Post.simple_search('york', pattern: :ending)
-    # It will search like '%york'
-
-    Post.simple_search('york', pattern: :beginning)
-    # It will search like 'york%'
-
-    Post.simple_search('york', pattern: :containing)
-    # It will search like '%york%'
-
-    Post.simple_search('o', pattern: :underscore)
-    # It will search like '_o_'
-
-    Post.simple_search('yourk', pattern: :plain)
-    # It will search like 'york'
-```
-- Added **block** support to ```simple_search``` method, so user can extend the query as per
-  his/her requirements (Now you can operate on the integer/decimal values also)
-
-- Added specs
-
-- Added exception handler
 
 ## Installation
 
@@ -73,7 +36,7 @@ Or install it yourself as:
 
 ## Usage
 
-Define attributes that you want to search through RubySimpleSearch
+Define attributes that you want to search on it
 
 ```Ruby
 class Post < ActiveActiveRecord::Base
@@ -82,6 +45,7 @@ class Post < ActiveActiveRecord::Base
   simple_search_attributes :title, :description
 end
 ```
+
 ```Ruby
 class User < ActiveActiveRecord::Base
   include RubySimpleSearch
@@ -89,37 +53,62 @@ class User < ActiveActiveRecord::Base
   simple_search_attributes :email, :username, :address
 end
 ```
-While defining ```simple_search_attributes```, don't add integer/decimal data
-attributes to it, instead of this you can do integer/decimal operation
-by passing block to ```simple_search``` method
-```Ruby
-Post.simple_search('tuto', :pattern => :beginning)
-# => posts which have 'tuto%' text in the title or in the description fields
+
+Please do not pass **integer/decimal** data type attributes to the `simple_search_attributes `
+method, instead; you can handle these types by passing block to the `simple_search` method.
+Block should return an array of search condition and values.
+
+## Features
+
+1 - You can pass a `LIKE` pattern to the `simple_search` method
+
+```ruby
+Post.simple_search('york', pattern: :beginning)
+# It will search like 'york%' and finds any values that start with "york"
+
+Post.simple_search('york', pattern: :ending)
+# It will search like '%york' and finds any values that end with "york"
+
+Post.simple_search('york', pattern: :containing)
+# It will search like '%york%' and finds any values that have "york" in any position
+
+Post.simple_search('york', pattern: :plain)
+# It will search like 'york' and finds any values that have "york" word
 ```
-```Ruby
-User.simple_search('mechanicles')
-# => users which have 'mechanicles' text in the email, username and in address
+
+2 - Overide default search attributes (Credit goes to [@abdullahtariq1171](https://github.com/abdullahtariq1171))
+
+```ruby
+Post.simple_search('york', pattern: :beginning, attributes: :name)
+
+User.simple_search('york', pattern: :ending, attributes: [:name, :address])
 ```
+
+3 - Ruby block support to extend the query
+
 ```Ruby
-User.simple_search('mechanicles') do |search_term|
-  ["and address != ?", search_term]
+User.simple_search('35') do |search_term|
+  ["AND age = ?", search_term]
 end
-# => You can pass block to simple_search method so you can extend it as your
-# wish but you need to return an array of valid parameters like you do in #where
-# method
 ```
+
+4 - Search returns `ActiveRecord::Relation` Object
+
+
 ```Ruby
-Model.simple_search('string')
-# => with and without block will return ActiveRecord::Relation object
-```
-```Ruby
+Model.simple_search('string') # => ActiveRecord::Relation object
+
 Model.simple_search('string').to_sql
-#OR
+
+# OR
+
 User.simple_search('mechanicles') do |search_term|
-  ["and address != ?", search_term]
+  ["AND address != ?", search_term]
 end.to_sql
-# => will return sql query in string format
+
+# => It will return an SQL query in string format
 ```
+
 ## Contributing
 
 1. Fork it

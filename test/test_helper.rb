@@ -98,7 +98,7 @@ module UserTest
     assert_equal '%q%', User.instance_variable_get('@simple_search_pattern')
   end
 
-  def test_it_can_have_patterns_like_plain_beginning_ending_containing_and_underscore
+  def test_it_can_have_patterns_like_plain_beginning_ending_and_containing
     User.simple_search('alice', pattern: :plain)
     assert_equal 'q', User.instance_variable_get('@simple_search_pattern')
 
@@ -109,9 +109,6 @@ module UserTest
 
     User.simple_search('alice', pattern: :containing)
     assert_equal '%q%', User.instance_variable_get('@simple_search_pattern')
-
-    User.simple_search('alice', pattern: :underscore)
-    assert_equal '_q_', User.instance_variable_get('@simple_search_pattern')
   end
 
   def test_it_searches_the_users_whose_names_are_alice
@@ -167,14 +164,6 @@ module UserTest
     users = User.where('name like ?', '%ce')
 
     searched_users = User.simple_search('ce', pattern: :ending)
-
-    assert_equal searched_users.count, users.count
-  end
-
-  def test_searches_the_records_with_underscore_pattern
-    users = User.where('name like ?', 'ce')
-
-    searched_users = User.simple_search('ce', pattern: :underscore)
 
     assert_equal searched_users.count, users.count
   end
