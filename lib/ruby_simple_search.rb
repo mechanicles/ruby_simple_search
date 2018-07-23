@@ -86,11 +86,11 @@ module RubySimpleSearch
 
     def build_query_non_string_text_type(attribute)
       condition = if @simple_search_query_conditions.blank?
-                    "#{table_name}.#{attribute} = ?"
+                    "CAST(#{table_name}.#{attribute} AS CHAR(255)) LIKE ?"
                   else
-                    " OR #{table_name}.#{attribute} = ?"
+                    " OR CAST(#{table_name}.#{attribute} AS CHAR(255)) LIKE ?"
                   end
-      [condition, @simple_search_term]
+      [condition, @simple_search_patterned_text]
     end
 
     def extend_query(block)
