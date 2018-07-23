@@ -8,7 +8,7 @@ It offers simple but useful features:
 - [Override default search attributes to specific attributes ](#override-default-search-attributes-to-specific-attributes) (Credit goes to [@abdullahtariq1171](https://github.com/abdullahtariq1171))
 - [Search using patterns](#search-using-patterns)
 - [Ruby Block support to extend the search query](#ruby-block-support-to-extend-the-search-query)
-- [Simple search returns an `ActiveRecord::Relation`](#simple-search-returns-an-`ActiveRecord::Relation`)
+- [Simple search returns an `ActiveRecord::Relation`](#simple-search-returns-an-activerecordrelation)
 
 Mostly on the admin side, we do have a standard text field to search the data on the table.
 Sometimes we want to search for the title, content and ratings on the post model or email,
