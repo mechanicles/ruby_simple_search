@@ -5,9 +5,9 @@ The simplest way to search the data in ActiveRecord models.
 It offers simple but useful features:
 
 - Search on the default attributes
-- Override default search attributes to specific attributes
+- [Override default search attributes to specific attributes](#specific-attributes)
 - [Search using patterns](#patterns)
-- Block support to extend the search query
+- [Block support to extend the search query](#block-support)
 - Simple search returns an `ActiveRecord::Relation`
 
 Mostly on the admin side, we do have a standard text field to search the data on the table.
@@ -76,7 +76,7 @@ Post.simple_search('york', pattern: :plain)
 # It will search like 'york' and finds any values that have "york" word
 ```
 
-2 - Overide default search attributes (Credit goes to [@abdullahtariq1171](https://github.com/abdullahtariq1171))
+<a name="specific-attributes"> 2 </a> - Overide default search attributes (Credit goes to [@abdullahtariq1171](https://github.com/abdullahtariq1171))
 
 ```ruby
 Post.simple_search('york', pattern: :beginning, attributes: :name)
@@ -84,7 +84,7 @@ Post.simple_search('york', pattern: :beginning, attributes: :name)
 User.simple_search('york', pattern: :ending, attributes: [:name, :address])
 ```
 
-3 - Ruby block support to extend the query
+<a name="block-support"> 3 </a> - Ruby block support to extend the query
 
 ```Ruby
 User.simple_search('35') do |search_term|
