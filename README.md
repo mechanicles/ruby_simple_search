@@ -18,7 +18,7 @@ and again on the different models, you add lots of duplication in your code.
 
 #### Do not repeat yourself, use RubySimpleSearch.
 
-[![CircleCI](https://circleci.com/gh/mechanicles/ruby_simple_search.svg?style=svg)](https://circleci.com/gh/mechanicles/ruby_simple_search)
+[![Build Status](https://travis-ci.org/mechanicles/ruby_simple_search.svg?branch=master)](https://travis-ci.org/mechanicles/ruby_simple_search)
 
 ## Installation
 
