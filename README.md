@@ -6,7 +6,7 @@ It offers simple but useful features:
 
 - Search on the default attributes
 - Override default search attributes to specific attributes
-- Search using patterns
+- [Search using patterns](#patterns)
 - Block support to extend the search query
 - Simple search returns an `ActiveRecord::Relation`
 
@@ -60,7 +60,7 @@ Block should return an array of search condition and values.
 
 ## Features
 
-1 - You can pass a `LIKE` pattern to the `simple_search` method
+<a name="patterns"> 1 </a> - You can pass a `LIKE` pattern to the `simple_search` method
 
 ```ruby
 Post.simple_search('york', pattern: :beginning)
