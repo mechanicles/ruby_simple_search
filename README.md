@@ -4,11 +4,11 @@ The simplest way to search the data in ActiveRecord models.
 
 It offers simple but useful features:
 
-- Search on the default attributes
-- Override default search attributes to specific attributes
-- Search using patterns
-- Block support to extend the search query
-- Simple search returns an `ActiveRecord::Relation`
+- [Search on the default attributes](#search-on-the-default-attributes)
+- [Override default search attributes to specific attributes ](#override-default-search-attributes-to-specific-attributes) (Credit goes to [@abdullahtariq1171](https://github.com/abdullahtariq1171))
+- [Search using patterns](#search-using-patterns)
+- [Ruby Block support to extend the search query](#ruby-block-support-to-extend-the-search-query)
+- [Simple search returns an `ActiveRecord::Relation`](#simple-search-returns-an-`ActiveRecord::Relation`)
 
 Mostly on the admin side, we do have a standard text field to search the data on the table.
 Sometimes we want to search for the title, content and ratings on the post model or email,
@@ -60,7 +60,43 @@ Block should return an array of search condition and values.
 
 ## Features
 
-1 - You can pass a `LIKE` pattern to the `simple_search` method
+### Search on the default attributes
+If you don't provide any attribute at time of searching it will use `simple_search_attributes` from modal.
+```
+class User < ActiveActiveRecord::Base
+  include RubySimpleSearch
+
+  simple_search_attributes :email, :username, :address
+end
+
+
+Post.simple_search('york')
+# It will search in :email, :username and :address only
+```
+
+
+### Override default search attributes to specific attributes
+
+If you wan't to perform a specific search on particular attributes, you can pass specific attributes with `attributes` option
+```
+class User < ActiveActiveRecord::Base
+  include RubySimpleSearch
+
+  simple_search_attributes :email, :username, :address
+end
+
+Post.simple_search('york')
+# It will search in :email, :username and :address only
+
+Post.simple_search('york', attributes: :address)
+# It will search in :address only
+
+User.simple_search('york', pattern: :ending, attributes: [:email, :address])
+# It will search in :name and :address only
+```
+
+### Search using patterns
+You can pass a `LIKE` pattern to the `simple_search` method
 
 ```ruby
 Post.simple_search('york', pattern: :beginning)
@@ -76,15 +112,8 @@ Post.simple_search('york', pattern: :plain)
 # It will search like 'york' and finds any values that have "york" word
 ```
 
-2 - Overide default search attributes (Credit goes to [@abdullahtariq1171](https://github.com/abdullahtariq1171))
+### Ruby Block support to extend the search query
 
-```ruby
-Post.simple_search('york', pattern: :beginning, attributes: :name)
-
-User.simple_search('york', pattern: :ending, attributes: [:name, :address])
-```
-
-3 - Ruby block support to extend the query
 
 ```Ruby
 User.simple_search('35') do |search_term|
@@ -92,8 +121,7 @@ User.simple_search('35') do |search_term|
 end
 ```
 
-4 - Search returns `ActiveRecord::Relation` Object
-
+### Simple search returns an `ActiveRecord::Relation`
 
 ```Ruby
 Model.simple_search('string') # => ActiveRecord::Relation object
