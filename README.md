@@ -8,7 +8,7 @@ It offers simple but useful features:
 - [Override default search attributes to specific attributes](#specific-attributes)
 - [Search using patterns](#patterns)
 - [Block support to extend the search query](#block-support)
-- Simple search returns an `ActiveRecord::Relation`
+- [Simple search returns an `ActiveRecord::Relation`](#active-record)
 
 Mostly on the admin side, we do have a standard text field to search the data on the table.
 Sometimes we want to search for the title, content and ratings on the post model or email,
@@ -92,7 +92,7 @@ User.simple_search('35') do |search_term|
 end
 ```
 
-4 - Search returns `ActiveRecord::Relation` Object
+<a name="active-record"> 4 </a>  - Search returns `ActiveRecord::Relation` Object
 
 
 ```Ruby
