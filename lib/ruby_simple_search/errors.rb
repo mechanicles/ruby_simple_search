@@ -1,11 +1,10 @@
-require "ruby_simple_search/errors"
-
 module RubySimpleSearch
   module Errors
-    ATTRIBUTES_MISSING     = "Simple search attributes are missing"
-    INVALID_TYPE           = "Extended query is not an array type"
-    INVALID_CONDITION      = "Extended query's array conditions are wrong"
-    INVALID_PATTERN        = "Pattern is wrong. it should be in the list #{RubySimpleSearch::LIKE_PATTERNS.keys}"
-    WRONG_ATTRIBUTES        = "simple_search_arguments method's arguments should be in symbol format"
+    ATTRIBUTES_MISSING = 'Simple search attributes are missing'.freeze
+    INVALID_CONDITION  = "Extended query's array conditions are wrong".freeze
+    INVALID_TYPE       = 'Extended query is not an array type'.freeze
+    INVALID_PATTERN    = "Looks like given pattern is wrong, valid pattern list is '#{LIKE_PATTERNS.keys}'".freeze
+    SEARCH_ARG_TYPE    = '`search_term` argument is not a string'.freeze
+    WRONG_ATTRIBUTES   = "`simple_search_arguments` method's arguments should be in symbol format".freeze
   end
 end

@@ -1,17 +1,18 @@
-require "ruby_simple_search/version"
-require "ruby_simple_search/like_pattern"
-require "ruby_simple_search/errors"
+require 'ruby_simple_search/version'
+require 'ruby_simple_search/like_patterns'
+require 'ruby_simple_search/errors'
 require 'active_support/concern'
 
 module RubySimpleSearch
   extend ActiveSupport::Concern
 
   included do
-    class_eval do
-      def self.simple_search_attributes(*args)
+    instance_eval do
+      def simple_search_attributes(*args)
         @simple_search_attributes = []
         args.each do |arg|
-          raise ArgumentError, RubySimpleSearch::Errors::WRONG_ATTRIBUTES unless arg.is_a? Symbol
+          raise ArgumentError, Errors::WRONG_ATTRIBUTES unless arg.is_a? Symbol
+
           @simple_search_attributes << arg
         end
       end
@@ -19,84 +20,96 @@ module RubySimpleSearch
   end
 
   module ClassMethods
-    def simple_search(search_term, options={}, &block)
-      raise RubySimpleSearch::Errors::ATTRIBUTES_MISSING if @simple_search_attributes.blank?
-      raise ArgumentError, "Argument is not string" unless search_term.is_a? String
-      set_pattern(options[:pattern])
+    def simple_search(search_term, options = {}, &block)
+      raise Errors::ATTRIBUTES_MISSING if @simple_search_attributes.blank?
+      raise ArgumentError, Errors::SEARCH_ARG_TYPE unless search_term.is_a? String
 
-      extended_query = nil
-      sql_query_condition = ""
-      sql_query_values = []
+      @simple_search_term             = search_term
+      @simple_search_pattern          = get_pattern(options[:pattern])
+      @simple_search_patterned_text   = @simple_search_pattern.gsub('q', @simple_search_term.try(:downcase))
+      @simple_search_query_conditions = ''
+      @simple_search_query_values     = []
 
-      patterned_text = "#{@simple_search_pattern.gsub('q', search_term.try(:downcase))}"
+      build_query_conditions_and_values(options)
+      extend_query(block) if block.is_a? Proc
 
-
-      if options[:attributes].nil?
-        sql_query_values, sql_query_condition = search_attributes(@simple_search_attributes, patterned_text)
-      else
-        attr = *options[:attributes]
-        sql_query_values, sql_query_condition = search_attributes(attr, patterned_text)
-      end
-
-      if block.is_a? Proc
-        sql_query_condition = "(#{sql_query_condition})"
-        extended_query = block.call(search_term)
-      end
-
-      if !extended_query.nil?
-        sql_query_values, sql_query_condition = extend_simple_search(extended_query,
-                                                                     sql_query_condition,
-                                                                     sql_query_values)
-      end
-      sql_query = [sql_query_condition, sql_query_values]
-
+      sql_query = [@simple_search_query_conditions, @simple_search_query_values]
       where(sql_query.flatten)
     end
 
     private
 
-    def set_pattern(pattern)
+    def get_pattern(pattern)
       if pattern.nil?
         # default pattern is '%q%'
-        @simple_search_pattern = RubySimpleSearch::LIKE_PATTERNS[:containing]
+        LIKE_PATTERNS[:containing]
       else
-        pattern = RubySimpleSearch::LIKE_PATTERNS[pattern.to_sym]
-        raise RubySimpleSearch::Errors::INVALID_PATTERN if pattern.nil?
-        @simple_search_pattern = pattern
+        pattern = LIKE_PATTERNS[pattern.to_sym]
+        raise Errors::INVALID_PATTERN if pattern.nil?
+
+        pattern
       end
     end
 
-    def extend_simple_search(extended_query, sql_query_condition, sql_query_values)
-      raise RubySimpleSearch::Errors::INVALID_TYPE unless extended_query.is_a?(Array)
+    def build_query_conditions_and_values(options)
+      attributes = if options[:attributes].nil?
+                     @simple_search_attributes
+                   else
+                     _attr = *options[:attributes]
+                   end
+
+      attributes.each do |attribute|
+        condition, value = build_query_condition_and_value(attribute)
+
+        @simple_search_query_conditions << condition
+        @simple_search_query_values << value
+      end
+    end
+
+    def build_query_condition_and_value(attribute)
+      condition = if %i[string text].include?(columns_hash[attribute.to_s].type)
+                    build_query_for_string_and_text_types(attribute)
+                  else
+                    build_query_non_string_and_text_types(attribute)
+                  end
+
+      [condition, @simple_search_patterned_text]
+    end
+
+    def build_query_for_string_and_text_types(attribute)
+      if @simple_search_query_conditions.blank?
+        "LOWER(#{table_name}.#{attribute}) LIKE ?"
+      else
+        " OR LOWER(#{table_name}.#{attribute}) LIKE ?"
+      end
+    end
+
+    def build_query_non_string_and_text_types(attribute)
+      if @simple_search_query_conditions.blank?
+        "CAST(#{table_name}.#{attribute} AS CHAR(255)) LIKE ?"
+      else
+        " OR CAST(#{table_name}.#{attribute} AS CHAR(255)) LIKE ?"
+      end
+    end
+
+    def extend_query(block)
+      @simple_search_query_conditions = "(#{@simple_search_query_conditions})"
+      extended_query = block.call @simple_search_term
+      extend_simple_search(extended_query) if extended_query
+    end
+
+    def extend_simple_search(extended_query)
+      raise Errors::INVALID_TYPE unless extended_query.is_a?(Array)
+
       extended_query_condition = extended_query[0]
-      extended_query_values = extended_query - [extended_query[0]]
+      extended_query_values    = extended_query - [extended_query[0]]
 
-      if extended_query_condition.count('?') != (extended_query_values.size)
-        raise RubySimpleSearch::Errors::INVALID_CONDITION
+      if extended_query_condition.count('?') != extended_query_values.size
+        raise Errors::INVALID_CONDITION
       end
 
-      sql_query_condition = [sql_query_condition, extended_query_condition].join(' ')
-      sql_query_values = sql_query_values + extended_query_values
-
-      [sql_query_values, sql_query_condition]
+      @simple_search_query_conditions << " #{extended_query_condition}"
+      @simple_search_query_values += extended_query_values
     end
-
-    def set_sql_query_condition(attr, sql_query_condition)
-      return "LOWER(#{self.table_name}.#{attr.to_s}) LIKE ?" if sql_query_condition.blank?
-      " OR LOWER(#{self.table_name}.#{attr.to_s}) LIKE ?"
-    end
-
-    def search_attributes(attributes, patterned_text)
-      sql_query_condition = ""
-      sql_query_values = []
-
-      attributes.each do |attr|
-        sql_query_condition << set_sql_query_condition(attr, sql_query_condition)
-        sql_query_values << patterned_text
-      end
-
-      [sql_query_values, sql_query_condition]
-    end
-
   end
 end
