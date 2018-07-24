@@ -7,6 +7,9 @@ require 'active_record'
 
 Minitest::Test = Minitest::Unit::TestCase unless defined?(Minitest::Test)
 
+# for debugging
+# ActiveRecord::Base.logger = Logger.new(STDOUT)
+
 class User < ActiveRecord::Base
   include RubySimpleSearch
   has_many :posts
@@ -106,7 +109,7 @@ module SearchTest
   def test_it_searches_the_users_whose_names_are_alice
     User.simple_search_attributes :name, :email, :contact, :address, :age
 
-    user  = User.find_by_name('alice')
+    user  = User.find_by(name: 'alice')
     users = User.simple_search('alice')
 
     assert_includes users, user
@@ -125,7 +128,7 @@ module SearchTest
   def test_it_searches_the_users_whose_names_are_alice_with_beginning_pattern
     User.simple_search_attributes :name, :email, :contact, :address
 
-    user  = User.find_by_name('alice')
+    user  = User.find_by(name: 'alice')
     users = User.simple_search('al', pattern: :beginning)
 
     assert_includes users, user
@@ -254,7 +257,7 @@ module SearchTest
   def test_it_seraches_the_records_from_non_string_and_text_types_data
     User.simple_search_attributes :age
 
-    user           = User.find_by_age('60')
+    user           = User.find_by(age: '60')
     searched_users = User.simple_search('60')
 
     assert_includes searched_users, user

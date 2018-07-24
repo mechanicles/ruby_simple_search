@@ -1,8 +1,13 @@
 language: ruby
-cache: bundler
 rvm:
-  - 2.2.2
-gemfile: Gemfile
+  - 2.2.4
+gemfile:
+  - Gemfile
+  - test/gemfiles/activerecord31.gemfile
+  - test/gemfiles/activerecord32.gemfile
+  - test/gemfiles/activerecord40.gemfile
+  - test/gemfiles/activerecord41.gemfile
+  - test/gemfiles/activerecord42.gemfile
 sudo: false
 script: RUBYOPT=W0 bundle exec rake test
 before_install:
