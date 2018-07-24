@@ -12,6 +12,7 @@ class TestSqlite < Minitest::Test
                   ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
                   create_tables
                   create_dummy_data
+                  true
                 end
   end
 end

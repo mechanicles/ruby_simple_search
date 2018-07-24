@@ -12,6 +12,7 @@ class PostgresqlTest < Minitest::Test
                   ActiveRecord::Base.establish_connection adapter: 'postgresql', database: 'ruby_simple_search_test'
                   create_tables
                   create_dummy_data
+                  true
                 end
   end
 end

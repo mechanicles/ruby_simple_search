@@ -21,6 +21,7 @@ class MysqlTest < Minitest::Test
                   ActiveRecord::Base.establish_connection adapter: 'mysql2', database: 'ruby_simple_search_test', host: 'localhost'
                   create_tables
                   create_dummy_data
+                  true
                 end
   end
 end
