@@ -1,9 +1,8 @@
 require 'bundler/gem_tasks'
 require 'rake/testtask'
 
-task default: :test
-Rake::TestTask.new do |t|
-  t.libs << 'test'
-  t.test_files = FileList['test/**/*_test.rb']
-  t.warning = false
+task :test do
+  sh "ruby test/sqlite_test.rb"
+  sh "ruby test/mysql_test.rb"
+  sh "ruby test/postgresql_test.rb"
 end

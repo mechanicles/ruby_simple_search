@@ -45,7 +45,6 @@ module RubySimpleSearch
         LIKE_PATTERNS[:containing]
       else
         pattern = LIKE_PATTERNS[pattern.to_sym]
-
         raise Errors::INVALID_PATTERN if pattern.nil?
 
         pattern
