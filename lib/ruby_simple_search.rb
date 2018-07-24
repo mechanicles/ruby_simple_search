@@ -68,29 +68,29 @@ module RubySimpleSearch
     end
 
     def build_query_condition_and_value(attribute)
-      if %i[string text].include?(columns_hash[attribute.to_s].type)
-        build_query_for_string_text_type(attribute)
+      condition = if %i[string text].include?(columns_hash[attribute.to_s].type)
+                    build_query_for_string_and_text_types(attribute)
+                  else
+                    build_query_non_string_and_text_types(attribute)
+                  end
+
+      [condition, @simple_search_patterned_text]
+    end
+
+    def build_query_for_string_and_text_types(attribute)
+      if @simple_search_query_conditions.blank?
+        "LOWER(#{table_name}.#{attribute}) LIKE ?"
       else
-        build_query_non_string_text_type(attribute)
+        " OR LOWER(#{table_name}.#{attribute}) LIKE ?"
       end
     end
 
-    def build_query_for_string_text_type(attribute)
-      condition = if @simple_search_query_conditions.blank?
-                    "LOWER(#{table_name}.#{attribute}) LIKE ?"
-                  else
-                    " OR LOWER(#{table_name}.#{attribute}) LIKE ?"
-                  end
-      [condition, @simple_search_patterned_text]
-    end
-
-    def build_query_non_string_text_type(attribute)
-      condition = if @simple_search_query_conditions.blank?
-                    "CAST(#{table_name}.#{attribute} AS CHAR(255)) LIKE ?"
-                  else
-                    " OR CAST(#{table_name}.#{attribute} AS CHAR(255)) LIKE ?"
-                  end
-      [condition, @simple_search_patterned_text]
+    def build_query_non_string_and_text_types(attribute)
+      if @simple_search_query_conditions.blank?
+        "CAST(#{table_name}.#{attribute} AS CHAR(255)) LIKE ?"
+      else
+        " OR CAST(#{table_name}.#{attribute} AS CHAR(255)) LIKE ?"
+      end
     end
 
     def extend_query(block)
