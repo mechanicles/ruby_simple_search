@@ -109,7 +109,7 @@ module SearchTest
   def test_it_searches_the_users_whose_names_are_alice
     User.simple_search_attributes :name, :email, :contact, :address, :age
 
-    user  = User.find_by(name: 'alice')
+    user  = User.where(name: 'alice').first
     users = User.simple_search('alice')
 
     assert_includes users, user
@@ -128,7 +128,7 @@ module SearchTest
   def test_it_searches_the_users_whose_names_are_alice_with_beginning_pattern
     User.simple_search_attributes :name, :email, :contact, :address
 
-    user  = User.find_by(name: 'alice')
+    user  = User.where(name: 'alice').first
     users = User.simple_search('al', pattern: :beginning)
 
     assert_includes users, user
@@ -156,7 +156,7 @@ module SearchTest
     users          = User.where(address: 'usa')
     searched_users = User.simple_search('USA')
 
-    assert_equal users.pluck(:id), searched_users.pluck(:id)
+    assert_equal users.collect(&:id), searched_users.collect(&:id)
   end
 
   def test_it_searches_the_records_with_beginning_pattern
@@ -193,8 +193,8 @@ module SearchTest
       ['AND age > ?', 50]
     end
 
-    assert_equal searched_users.pluck(:address), ['usa']
-    assert_equal searched_users.pluck(:age), [60]
+    assert_equal searched_users.collect(&:address), ['usa']
+    assert_equal searched_users.collect(&:age), [60]
   end
 
   def test_returns_an_exception_if_array_condition_is_wrong_in_simple_search_block
@@ -226,7 +226,7 @@ module SearchTest
 
     searched_users = User.simple_search('26', pattern: :containing, attributes: :age)
 
-    assert_equal [26], searched_users.pluck(:age)
+    assert_equal [26], searched_users.collect(&:age)
   end
 
   def test_it_searches_the_users_with_username_and_it_ends_with_khan_word
@@ -234,7 +234,7 @@ module SearchTest
 
     searched_users = User.simple_search('khan', pattern: :ending, attributes: [:username])
 
-    assert_equal ['kingkhan'], searched_users.pluck(:username)
+    assert_equal ['kingkhan'], searched_users.collect(&:username)
   end
 
   def test_it_searches_the_users_with_email_containing_example_word
@@ -242,7 +242,7 @@ module SearchTest
 
     searched_users = User.simple_search('example', pattern: :containing, attributes: [:email])
 
-    assert_equal ['alice@example.com', 'bob@example.com'], searched_users.pluck(:email)
+    assert_equal ['alice@example.com', 'bob@example.com'], searched_users.collect(&:email)
   end
 
   def test_it_searches_user_with_name_or_address_containing_a_word
@@ -250,14 +250,14 @@ module SearchTest
 
     searched_users = User.simple_search('a', pattern: :containing, attributes: [:name, :address])
 
-    assert_equal ['alice', 'bob'], searched_users.pluck(:name)
-    assert_equal ['usa', 'india'], searched_users.pluck(:address)
+    assert_equal ['alice', 'bob'], searched_users.collect(&:name)
+    assert_equal ['usa', 'india'], searched_users.collect(&:address)
   end
 
   def test_it_seraches_the_records_from_non_string_and_text_types_data
     User.simple_search_attributes :age
 
-    user           = User.find_by(age: '60')
+    user           = User.where(age: '60').first
     searched_users = User.simple_search('60')
 
     assert_includes searched_users, user
@@ -277,7 +277,7 @@ module JoinTest
       ['AND posts.name = ? ', 'Ruby is simple' ]
     end
 
-    assert_equal ['alice'], searched_users.pluck(:name)
+    assert_equal ['alice'], searched_users.collect(&:name)
   end
 end
 
