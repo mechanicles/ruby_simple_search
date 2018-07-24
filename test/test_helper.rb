@@ -254,7 +254,7 @@ module SearchTest
     assert_equal ['usa', 'india'], searched_users.pluck(:address)
   end
 
-  def test_it_seraches_the_records_from_non_string_and_text_types_data
+  def test_it_searches_the_records_from_non_string_and_text_types_data
     User.simple_search_attributes :age
 
     user           = User.find_by(age: '60')
