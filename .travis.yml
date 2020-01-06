@@ -1,20 +1,32 @@
+---
+sudo: true
+env:
+  global:
+    - CC_TEST_REPORTER_ID=feb97978987d37794883977131b61c2b0a561bb35f4fa62ea30c3c5ce4c0794f
 language: ruby
 rvm:
-  - 2.2.4
+  - 2.5.3
 gemfile:
   - Gemfile
   - test/gemfiles/activerecord51.gemfile
   - test/gemfiles/activerecord50.gemfile
   - test/gemfiles/activerecord42.gemfile
-sudo: false
-script:
-  - ruby test/sqlite_test.rb
-  - ruby test/mysql_test.rb
-  - ruby test/postgresql_test.rb
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+script: bundle exec rake test
+after_script:
+  - ./cc-test-reporter after-build --debug --exit-code $TRAVIS_TEST_RESULT
+services:
+  - postgresql
+  - mysql
+addons:
+  postgresql: 10
 before_install:
-  - gem install bundler
-  - mysql -e 'create database ruby_simple_search_test;'
-  - psql -c 'create database ruby_simple_search_test;' -U postgres
+  - mysqladmin create ruby_simple_search_test
+  - mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql
+  - createdb ruby_simple_search_test
 notifications:
   email:
     on_success: never
