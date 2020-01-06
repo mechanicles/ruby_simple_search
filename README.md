@@ -1,5 +1,10 @@
 # RubySimpleSearch
 
+
+[![Build Status](https://travis-ci.org/mechanicles/ruby_simple_search.svg?branch=master)](https://travis-ci.org/mechanicles/ruby_simple_search)
+[![Maintainability](https://api.codeclimate.com/v1/badges/20e84a4c3be302b07653/maintainability)](https://codeclimate.com/github/mechanicles/ruby_simple_search/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/20e84a4c3be302b07653/test_coverage)](https://codeclimate.com/github/mechanicles/ruby_simple_search/test_coverage)
+
 The simplest way to search the data in ActiveRecord models.
 
 It offers simple but useful features:
@@ -17,10 +22,6 @@ MySQL's or PostgreSQL's `LIKE` operator to get the results. While doing the same
 and again on the different models, you add lots of duplication in your code.
 
 #### Do not repeat yourself, use RubySimpleSearch.
-
-[![Build Status](https://travis-ci.org/mechanicles/ruby_simple_search.svg?branch=master)](https://travis-ci.org/mechanicles/ruby_simple_search)
-[![Maintainability](https://api.codeclimate.com/v1/badges/20e84a4c3be302b07653/maintainability)](https://codeclimate.com/github/mechanicles/ruby_simple_search/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/20e84a4c3be302b07653/test_coverage)](https://codeclimate.com/github/mechanicles/ruby_simple_search/test_coverage)
 
 ## Installation
 
