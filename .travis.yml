@@ -8,9 +8,9 @@ rvm:
   - 2.5.3
 gemfile:
   - Gemfile
+  - test/gemfiles/activerecord52.gemfile
   - test/gemfiles/activerecord51.gemfile
   - test/gemfiles/activerecord50.gemfile
-  - test/gemfiles/activerecord42.gemfile
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
