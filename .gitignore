@@ -3,6 +3,7 @@
 .bundle
 .config
 .yardoc
+.ruby-version
 InstalledFiles
 _yardoc
 coverage
@@ -15,4 +16,4 @@ test/tmp
 test/version_tmp
 tmp
 tags
-
+Gemfile.lock
