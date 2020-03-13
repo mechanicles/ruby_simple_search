@@ -10,14 +10,15 @@ module RubySimpleSearch
 
   included do
     instance_eval do
-      def simple_search_attributes(*args)
-        @simple_search_attributes = []
-        args.each do |arg|
-          raise ArgumentError, Errors::WRONG_ATTRIBUTES unless arg.is_a? Symbol
+      private
+        def simple_search_attributes(*args)
+          @simple_search_attributes = []
+          args.each do |arg|
+            raise ArgumentError, Errors::WRONG_ATTRIBUTES unless arg.is_a? Symbol
 
-          @simple_search_attributes << arg
+            @simple_search_attributes << arg
+          end
         end
-      end
     end
   end
 
