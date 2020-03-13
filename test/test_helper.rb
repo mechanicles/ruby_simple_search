@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "simplecov"
+SimpleCov.command_name "Unit Tests"
 SimpleCov.start
 require "bundler/setup"
 Bundler.require(:default)
@@ -76,25 +77,25 @@ end
 
 module GemSetupTest
   def test_no_exception_is_raised_if_simple_search_attributes_is_called_in_the_model
-    User.simple_search_attributes :name, :email, :contact, :address
+    User.send(:simple_search_attributes, :name, :email, :contact, :address)
     assert_silent { User.simple_search("USA") }
   end
 
   def test_it_sets_attributes_properly
-    User.simple_search_attributes :name, :email, :contact, :address
+    User.send(:simple_search_attributes, :name, :email, :contact, :address)
 
     assert_equal %i[name email contact address], User.instance_variable_get("@simple_search_attributes")
   end
 
   def test_it_has_default_like_pattern
-    User.simple_search_attributes :name, :email, :contact, :address
+    User.send(:simple_search_attributes, :name, :email, :contact, :address)
     User.simple_search("Alice")
 
     assert_equal "%q%", User.instance_variable_get("@simple_search_pattern")
   end
 
   def test_it_can_have_patterns_like_plain_beginning_ending_and_containing
-    User.simple_search_attributes :name, :email, :contact, :address
+    User.send(:simple_search_attributes, :name, :email, :contact, :address)
 
     User.simple_search("alice", pattern: :plain)
     assert_equal "q", User.instance_variable_get("@simple_search_pattern")
@@ -111,7 +112,7 @@ end
 
 module SearchTest
   def test_it_searches_the_users_whose_names_are_alice
-    User.simple_search_attributes :name, :email, :contact, :address, :age
+    User.send(:simple_search_attributes, :name, :email, :contact, :address, :age)
 
     user  = User.find_by(name: "alice")
     users = User.simple_search("alice")
@@ -120,7 +121,7 @@ module SearchTest
   end
 
   def test_it_raises_an_exception_if_pattern_is_wrong
-    User.simple_search_attributes :name, :email, :contact, :address
+    User.send(:simple_search_attributes, :name, :email, :contact, :address)
 
     error = assert_raises(RuntimeError) do
       User.simple_search("alice", pattern: "wrong")
@@ -130,7 +131,7 @@ module SearchTest
   end
 
   def test_it_searches_the_users_whose_names_are_alice_with_beginning_pattern
-    User.simple_search_attributes :name, :email, :contact, :address
+    User.send(:simple_search_attributes, :name, :email, :contact, :address)
 
     user  = User.find_by(name: "alice")
     users = User.simple_search("al", pattern: :beginning)
@@ -139,7 +140,7 @@ module SearchTest
   end
 
   def test_it_returns_empty_users_if_pattern_is_beginning_but_query_has_non_beginning_characters
-    User.simple_search_attributes :name, :email, :contact, :address
+    User.send(:simple_search_attributes, :name, :email, :contact, :address)
 
     users = User.simple_search("ce", pattern: :beginning)
 
@@ -147,7 +148,7 @@ module SearchTest
   end
 
   def test_it_returns_empty_records_if_contact_number_does_not_exist
-    User.simple_search_attributes :name, :email, :contact, :address
+    User.send(:simple_search_attributes, :name, :email, :contact, :address)
 
     users = User.simple_search("343434")
 
@@ -155,7 +156,7 @@ module SearchTest
   end
 
   def test_it_searches_user_records_if_users_belong_to_usa
-    User.simple_search_attributes :name, :email, :contact, :address
+    User.send(:simple_search_attributes, :name, :email, :contact, :address)
 
     users          = User.where(address: "usa")
     searched_users = User.simple_search("USA")
@@ -164,7 +165,7 @@ module SearchTest
   end
 
   def test_it_searches_the_records_with_beginning_pattern
-    User.simple_search_attributes :name, :email, :contact, :address
+    User.send(:simple_search_attributes, :name, :email, :contact, :address)
 
     users          = User.where("name like ?", "bo%")
     searched_users = User.simple_search("bo", pattern: :beginning)
@@ -173,7 +174,7 @@ module SearchTest
   end
 
   def test_searches_the_records_with_ending_pattern
-    User.simple_search_attributes :name, :email, :contact, :address
+    User.send(:simple_search_attributes, :name, :email, :contact, :address)
 
     users          = User.where("name like ?", "%ce")
     searched_users = User.simple_search("ce", pattern: :ending)
@@ -182,7 +183,7 @@ module SearchTest
   end
 
   def test_searches_the_records_with_plain_pattern
-    User.simple_search_attributes :name, :email, :contact, :address
+    User.send(:simple_search_attributes, :name, :email, :contact, :address)
 
     users          = User.where("name like ?", "bob")
     searched_users = User.simple_search("bob", pattern: :plain)
@@ -191,7 +192,7 @@ module SearchTest
   end
 
   def test_returns_users_who_live_in_the_usa_and_their_age_is_greater_than_50
-    User.simple_search_attributes :name, :contact, :address
+    User.send(:simple_search_attributes, :name, :contact, :address)
 
     searched_users = User.simple_search("usa", pattern: :plain) do
       ["AND age > ?", 50]
@@ -202,7 +203,7 @@ module SearchTest
   end
 
   def test_returns_an_exception_if_array_condition_is_wrong_in_simple_search_block
-    User.simple_search_attributes :name, :contact, :address
+    User.send(:simple_search_attributes, :name, :contact, :address)
 
     error = assert_raises(RuntimeError) do
       User.simple_search("usa") do
@@ -214,7 +215,7 @@ module SearchTest
   end
 
   def test_returns_an_exception_if_condition_is_not_an_array_type
-    User.simple_search_attributes :name, :contact, :address
+    User.send(:simple_search_attributes, :name, :contact, :address)
 
     error = assert_raises(RuntimeError) do
       User.simple_search("usa") do
@@ -226,7 +227,7 @@ module SearchTest
   end
 
   def test_searches_the_users_with_age_is_26
-    User.simple_search_attributes :name, :contact, :address
+    User.send(:simple_search_attributes, :name, :contact, :address)
 
     searched_users = User.simple_search("26", pattern: :containing, attributes: :age)
 
@@ -234,7 +235,7 @@ module SearchTest
   end
 
   def test_it_searches_the_users_with_username_and_it_ends_with_khan_word
-    User.simple_search_attributes :name, :contact, :address
+    User.send(:simple_search_attributes, :name, :contact, :address)
 
     searched_users = User.simple_search("khan", pattern: :ending, attributes: [:username])
 
@@ -242,7 +243,7 @@ module SearchTest
   end
 
   def test_it_searches_the_users_with_email_containing_example_word
-    User.simple_search_attributes :name, :contact, :address
+    User.send(:simple_search_attributes, :name, :contact, :address)
 
     searched_users = User.simple_search("example", pattern: :containing, attributes: [:email])
 
@@ -250,7 +251,7 @@ module SearchTest
   end
 
   def test_it_searches_user_with_name_or_address_containing_a_word
-    User.simple_search_attributes :name, :contact, :address
+    User.send(:simple_search_attributes, :name, :contact, :address)
 
     searched_users = User.simple_search("a", pattern: :containing, attributes: [:name, :address])
 
@@ -259,14 +260,15 @@ module SearchTest
   end
 
   def test_it_searches_the_records_from_non_string_and_text_types_data
-    User.simple_search_attributes :age
+    User.send(:simple_search_attributes, :age)
+
 
     user           = User.find_by(age: "60")
     searched_users = User.simple_search("60")
 
     assert_includes searched_users, user
 
-    User.simple_search_attributes :age, :created_at
+    User.send(:simple_search_attributes, :age, :created_at)
     searched_users = User.simple_search(Date.today.year.to_s)
 
     assert_equal searched_users.count, User.count
@@ -275,7 +277,7 @@ end
 
 module JoinTest
   def test_simple_search_using_join
-    User.simple_search_attributes :name, :contact, :address
+    User.send(:simple_search_attributes, :name, :contact, :address)
 
     searched_users = User.joins(:posts).simple_search("alice") do |_|
       ["AND posts.name = ? ", "Ruby is simple" ]
@@ -287,7 +289,7 @@ end
 
 module ExcpetionsTest
   def test_returns_an_exception_if_simple_search_attributes_method_is_not_called_while_loading_the_model
-    User2.simple_search_attributes
+    User2.send(:simple_search_attributes)
 
     error = assert_raises(RuntimeError) { User2.simple_search("usa") }
 
@@ -295,7 +297,7 @@ module ExcpetionsTest
   end
 
   def test_returns_an_exception_if_search_term_argument_is_not_string_type
-    User2.simple_search_attributes :name, :contact
+    User2.send(:simple_search_attributes, :name, :contact)
 
     error = assert_raises(ArgumentError) { User2.simple_search(1) }
 
@@ -303,13 +305,13 @@ module ExcpetionsTest
   end
 
   def test_returns_an_exception_if_simple_search_attributes_method_has_wrong_attribute_type
-    error = assert_raises(ArgumentError) { User2.simple_search_attributes :name, "24" }
+    error = assert_raises(ArgumentError) { User2.send(:simple_search_attributes, :name, "24") }
 
     assert_equal RubySimpleSearch::Errors::WRONG_ATTRIBUTES, error.message
   end
 
   def test_it_sets_attributes_internally_if_simple_search_attributes_method_is_called_on_the_model
-    User2.simple_search_attributes :name, :contact
+    User2.send(:simple_search_attributes, :name, :contact)
 
     assert_equal [:name, :contact], User2.instance_variable_get("@simple_search_attributes")
   end
